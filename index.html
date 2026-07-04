@@ -1,0 +1,550 @@
+<!-- © 2026 Büchemeier Consulting. All rights reserved. buchemeier.no -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Operating Diagnosis — Büchemeier Consulting</title>
+<meta property="og:title" content="AI Operating Diagnosis — Büchemeier Consulting">
+<meta property="og:description" content="8 questions. Find out which of the 17 models in the Büchemeier framework are relevant to your organisation right now.">
+<meta property="og:url" content="https://diagnose.buchemeier.no">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231A2332'/><text x='50%25' y='56%25' font-family='monospace' font-size='18' font-weight='bold' fill='%236CA4AB' text-anchor='middle' dominant-baseline='middle'>AI</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#1A2332;--bg2:#1d2737;--bg3:#202c3d;
+  --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
+  --text:#eef2f5;--text2:#c2cdd6;--text3:#8fa3ae;
+  --accent:#6CA4AB;--accent2:#89bec5;--accent-bg:rgba(108,164,171,0.15);
+  --green:#2dd4a0;--amber:#f59e0b;
+  --mono:'DM Mono',monospace;--sans:'DM Sans',sans-serif;
+  --radius:10px;--radius-lg:16px;
+}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;font-size:15px;line-height:1.6}
+nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:60px;border-bottom:1px solid var(--border);position:sticky;top:0;background:rgba(12,12,14,0.92);backdrop-filter:blur(12px);z-index:10}
+.nav-logo{font-family:var(--mono);font-size:14px;color:var(--text)}
+.nav-logo span{color:var(--accent2)}
+.nav-links{display:flex;gap:6px;align-items:center}
+.nav-link{font-family:var(--mono);font-size:13px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;padding:6px 14px;cursor:pointer;color:var(--text3);transition:all 0.12s;text-decoration:none;display:inline-block}
+.nav-link:hover{color:var(--text);border-color:var(--border2)}
+.nav-link.active{border-color:var(--accent);color:var(--accent2);background:var(--accent-bg)}
+.nav-link.ext{font-family:var(--sans);background:none;border:none;color:var(--text3)}
+.nav-link.ext:hover{color:var(--accent2)}
+
+.hero{text-align:center;padding:2.5rem 2rem 0}
+.hero-eyebrow{font-family:var(--mono);font-size:13px;color:var(--accent2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem}
+.hero h1{font-size:clamp(24px,4vw,38px);font-weight:300;letter-spacing:-0.03em;margin-bottom:0.5rem;line-height:1.15}
+.hero h1 strong{font-weight:500;color:#fff}
+.hero p{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto}
+.hero-pov{display:inline-block;margin-top:1.25rem;padding:8px 18px;background:rgba(108,164,171,0.1);border:1px solid rgba(108,164,171,0.25);border-radius:20px;font-size:13px;color:var(--accent2);font-style:italic;letter-spacing:0.01em}
+
+.wrap{max-width:720px;margin:0 auto;padding:1.5rem 2rem 4rem}
+.wrap.wide{max-width:1100px}
+
+.steps-wrap{max-width:680px;margin:1.5rem auto 0;padding:0 2rem}
+.steps{display:flex;align-items:center}
+.step-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--radius);flex:1}
+.step-num{width:26px;height:26px;border-radius:50%;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--text3);flex-shrink:0;transition:all 0.2s}
+.step-item.active .step-num{background:var(--accent);border-color:var(--accent);color:#fff}
+.step-item.done .step-num{background:var(--green);border-color:var(--green);color:#0c0c0e;font-size:13px}
+.step-label{font-size:12.5px;color:var(--text3);display:none}
+.step-item.active .step-label{color:var(--text);font-weight:500;display:block}
+.step-connector{flex:0 0 1px;height:1px;background:var(--border)}
+
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem}
+.panel-title{font-size:13px;font-weight:500;color:var(--text2);margin-bottom:1rem;display:flex;align-items:center;gap:8px}
+.panel-title::before{content:'';width:3px;height:13px;background:var(--accent);border-radius:2px;display:inline-block}
+
+.qnum{font-family:var(--mono);font-size:12px;color:var(--text3);margin-bottom:8px;letter-spacing:0.04em;text-transform:uppercase}
+.qtitle{font-size:19px;font-weight:400;color:var(--text);margin:0 0 20px;line-height:1.4}
+
+.options{display:flex;flex-direction:column;gap:8px}
+.opt{
+  text-align:left;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 16px;font-size:14.5px;line-height:1.45;color:var(--text2);cursor:pointer;
+  transition:border-color 0.15s,background 0.15s,color 0.15s;font-family:var(--sans);
+}
+.opt:hover{border-color:var(--border2);color:var(--text)}
+.opt.selected{border-color:var(--accent);background:var(--accent-bg);color:var(--accent2)}
+
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
+.step-nav-btn{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:10px 20px;font-size:13px;font-family:var(--sans);color:var(--text2);cursor:pointer;transition:all 0.12s}
+.step-nav-btn:hover{border-color:var(--accent);color:var(--accent2)}
+.step-nav-btn:disabled{opacity:0;cursor:default}
+.step-nav-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.step-nav-btn.primary:hover{opacity:0.85}
+
+.intro-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin:1rem 0 0}
+.intro-list li{font-size:13.5px;color:var(--text2);display:flex;gap:10px;align-items:flex-start}
+.intro-list li::before{content:'—';color:var(--accent2);font-family:var(--mono)}
+
+.result-hero{background:var(--bg2);border:1px solid rgba(108,164,171,0.25);border-radius:var(--radius-lg);padding:1.5rem 1.75rem;margin-bottom:1.25rem}
+.result-hero .rec-model-label{font-size:12px;font-family:var(--sans);font-weight:600;color:var(--accent2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px}
+.result-hero h2{font-size:24px;font-weight:400;color:#fff;margin:0 0 8px;letter-spacing:-0.01em}
+.result-hero p{font-size:14px;color:var(--text2);line-height:1.55;margin:0}
+
+.model-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;gap:16px;align-items:flex-start}
+.model-card .rank{width:30px;height:30px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text3);font-family:var(--mono);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+.model-card .body{flex:1;min-width:0}
+.model-card .body h3{margin:0 0 6px;font-size:16px;font-weight:500;color:var(--text)}
+.model-card .body>p{margin:0 0 10px;color:var(--text3);font-size:13.5px;line-height:1.55}
+.insight{background:rgba(108,164,171,0.08);border-left:2px solid var(--accent);padding:10px 14px;font-size:13px;color:var(--text2);line-height:1.55;border-radius:0 8px 8px 0;margin-bottom:12px}
+
+.thumb{display:block;width:100%;border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:zoom-in;background:var(--bg3)}
+.thumb img{display:block;width:100%;height:auto}
+.thumb-cap{font-family:var(--mono);font-size:12px;color:var(--text3);margin-top:8px}
+.primary-poster .thumb{max-height:480px}
+.primary-poster .thumb img{object-fit:contain}
+
+.next-step{background:var(--bg2);border:1px solid rgba(45,212,160,0.25);border-radius:var(--radius-lg);padding:1.5rem 1.75rem;margin-top:1.5rem}
+.next-step .rec-model-label{font-size:12px;font-family:var(--sans);font-weight:600;color:var(--green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px}
+.next-step h3{margin:0 0 8px;font-size:17px;font-weight:500;color:var(--text)}
+.next-step p{margin:0 0 16px;color:var(--text2);font-size:13.5px;line-height:1.6}
+.cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;padding:11px 22px;font-size:13.5px;font-family:var(--sans);font-weight:500;border-radius:8px;cursor:pointer;text-decoration:none;transition:opacity 0.15s}
+.cta-btn:hover{opacity:0.85}
+
+.restart-row{text-align:center;margin-top:2rem}
+.action-btn{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 16px;font-size:12.5px;font-family:var(--mono);color:var(--text2);cursor:pointer;transition:all 0.12s}
+.action-btn:hover{border-color:var(--border2);color:var(--text)}
+
+/* hierarchy */
+.layer{margin-bottom:2.5rem}
+.layer-head{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.layer-num{font-family:var(--mono);font-size:12px;font-weight:500;color:#fff;background:var(--accent);width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.layer-title{font-size:16px;font-weight:500;color:var(--text)}
+.layer-sub{font-size:13px;color:var(--text3);margin:0 0 16px 36px;line-height:1.5}
+.layer-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+.mcard{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:zoom-in;background:var(--bg2);transition:border-color 0.15s}
+.mcard:hover{border-color:var(--accent)}
+.mcard img{display:block;width:100%;height:110px;object-fit:cover;object-position:top;background:var(--bg3)}
+.mcard .mcard-label{padding:10px 12px 12px;font-size:12.5px;font-weight:500;color:var(--text2);line-height:1.35}
+
+/* lightbox */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:100;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.open{display:flex}
+.lightbox-img{max-width:100%;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.modal-close{position:fixed;top:1.25rem;right:1.5rem;background:none;border:none;color:var(--text);font-size:26px;cursor:pointer;line-height:1}
+
+footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex-direction:column;gap:6px;max-width:1100px;margin:0 auto;font-size:13px;color:var(--text3);font-family:var(--mono);line-height:1.6}
+
+@media(max-width:640px){
+  .wrap{padding:1.25rem 1.25rem 3rem}
+  .model-card{flex-direction:column}
+  nav{padding:0 1.25rem}
+  .step-label{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">BÜCHEMEIER <span>CONSULTING</span></div>
+  <div class="nav-links">
+    <a href="#" class="nav-link" id="nav-diagnose" onclick="goHome();return false;">Diagnosis</a>
+    <a href="#" class="nav-link" id="nav-hierarchy" onclick="showHierarchy();return false;">Model Hierarchy</a>
+    <a class="nav-link ext" href="https://calc.buchemeier.no" target="_blank" rel="noopener">Cost Simulator ↗</a>
+  </div>
+</nav>
+
+<div id="app"></div>
+
+<div class="modal-overlay" id="lightbox" onclick="closeLightbox(event)">
+  <button class="modal-close" onclick="closeLightbox(event)">&times;</button>
+  <img class="lightbox-img" id="lightbox-img" src="" alt="">
+</div>
+
+<footer>
+  <div>© 2026 Büchemeier Consulting · diagnose.buchemeier.no</div>
+</footer>
+
+<script>
+/* ---------------------------------------------------------
+   DATA
+--------------------------------------------------------- */
+const MODELS = {
+  coordinationStrain: {
+    name: "AI Coordination Strain Model",
+    tag: "When AI execution outpaces organisational coordination",
+    insight: "AI execution scales capacity. Sustainable value comes from closing the coordination strain — continuously, not as a one-off project.",
+    img: "assets/models/coordination-strain.png"
+  },
+  costAmplification: {
+    name: "AI Cost Amplification Model",
+    tag: "Why operational architecture matters more than model pricing alone",
+    insight: "Model pricing sets the baseline. Workflow architecture determines the real operating cost. A cheap model in a poor architecture can cost more than a premium model in a well-designed system.",
+    img: "assets/models/cost-amplification.png"
+  },
+  executiveGovernance: {
+    name: "AI Executive Governance Shift Model",
+    tag: "How AI reshapes executive responsibility, governance and operating models",
+    insight: "AI does not only change tools and tasks. It changes where responsibility lies, how decisions are made, and how executives must lead and govern together.",
+    img: "assets/models/executive-governance.png"
+  },
+  absorptionGap: {
+    name: "AI Absorption Gap Model",
+    tag: "Why AI capacity does not automatically become organisational value",
+    insight: "AI does not automatically create value. AI creates capacity. Value emerges only when the organisation can absorb, govern, prioritise and operationalise the consequences of that capacity.",
+    img: "assets/models/absorption-gap.png"
+  },
+  leadershipWindow: {
+    name: "AI Leadership Window Model",
+    tag: "From AI adoption to real-time leadership discipline",
+    insight: "AI maturity is accelerating faster than leadership maturity. The leadership window belongs to organisations that build real-time governance before AI becomes structural power.",
+    img: "assets/models/leadership-window.png"
+  },
+  interimLeadership: {
+    name: "Interim Leadership Transition Model",
+    tag: "Why interim leadership becomes a strategic capability in AI-driven organisations",
+    insight: "AI increases transition pressure faster than most organisations can redesign leadership capacity around it. Interim leadership is the mechanism that makes transformation possible without stopping the business.",
+    img: "assets/models/interim-leadership.png"
+  },
+  shadowLogic: {
+    name: "Shadow AI & Shadow Logic Model",
+    tag: "The hidden layer influencing how operational decisions are made",
+    insight: "AI tools may be visible. But the logic they introduce can be invisible. Real value comes when both the tools and the logic are governed.",
+    img: "assets/models/shadow-logic.png"
+  },
+  operatingCost: {
+    name: "AI Operating Cost Model",
+    tag: "Why cost grows differently as work becomes more autonomous",
+    insight: "Design for efficiency so value grows faster than cost. Understand and manage cost per workflow, per outcome, per use case.",
+    img: "assets/models/operating-cost.png"
+  },
+  cultureSystem: {
+    name: "Culture System Model",
+    tag: "How culture emerges from system dynamics, not values alone",
+    insight: "Culture is not created by values alone. It emerges from the interaction of strategy, leadership, incentives, structure and operational reality — reinforced over time.",
+    img: "assets/models/culture-system.png"
+  },
+  operatingArchitecture: {
+    name: "AI Operating Architecture",
+    tag: "Manage access risk, control costs, ensure continuity",
+    insight: "Same workload, different model paths, dramatically different operating economics. Don't rely on a single model — build architecture that adapts.",
+    img: "assets/models/operating-architecture.png"
+  },
+  operationalCapacity: {
+    name: "AI Operational Capacity Model",
+    tag: "How AI changes the way organisations create, coordinate and execute work at scale",
+    insight: "AI does not only improve efficiency. It changes the operational capacity ceiling of the organisation.",
+    img: "assets/models/operational-capacity.png"
+  },
+  organizationalCoherence: {
+    name: "The Organizational Coherence Model",
+    tag: "How organisations maintain coordinated force under complexity",
+    insight: "Complexity is inevitable. Fragmentation is optional. Organisational coherence determines whether pressure creates friction or coordinated force.",
+    img: "assets/models/organizational-coherence.png"
+  },
+  leadershipBehaviour: {
+    name: "Leadership Behaviour System Model",
+    tag: "How system friction shapes rational leadership behaviour",
+    insight: "Organisations don't get the leadership behaviour they want. They get the leadership behaviour the system makes rational and rewards.",
+    img: "assets/models/leadership-behaviour.png"
+  },
+  capabilityStack: {
+    name: "AI Capability Stack Model",
+    tag: "How AI capabilities are built, governed and operationalised across the enterprise",
+    insight: "AI capability is not a single tool — it is a stack. Real value emerges only when experience, workflows, data, governance and execution work together under an aligned operating model.",
+    img: "assets/models/capability-stack.png"
+  },
+  workshopModel: {
+    name: "AI Absorption Gap Workshop Model",
+    tag: "From AI-generated capacity to realised organisational value",
+    insight: "The size of the gap is not a technology problem. It is a leadership, operating model and governance problem.",
+    img: "assets/models/absorption-gap-workshop.png"
+  },
+};
+
+const EXTRA_MODELS = {
+  metaFramework: { name: "AI Operating Model Framework", img: "assets/models/meta-framework.png" },
+  costSimulator: { name: "AI Operating Cost Simulator", img: "assets/models/cost-simulator.png" }
+};
+
+const HIERARCHY = [
+  { title:"Core Framework", sub:"The six models that together form the operating system for enterprise AI.",
+    items:["metaFramework","capabilityStack","operatingCost","costAmplification","shadowLogic","absorptionGap","costSimulator"] },
+  { title:"Leadership & Governance", sub:"How responsibility, decision rights and leadership capacity must change once AI holds operational power.",
+    items:["executiveGovernance","leadershipBehaviour","leadershipWindow","interimLeadership"] },
+  { title:"Organisation & System", sub:"How coherence, culture and capacity emerge — or break down — under AI-driven pressure.",
+    items:["organizationalCoherence","cultureSystem","coordinationStrain","operationalCapacity"] },
+  { title:"Architecture & Process", sub:"How operating architecture and structured process convert insight into action.",
+    items:["operatingArchitecture","workshopModel"] }
+];
+
+function getModel(key){ return MODELS[key] || EXTRA_MODELS[key]; }
+
+const QUESTIONS = [
+  { q:"Where is the friction coming from right now?", options:[
+    { label:"Decisions take too long", weights:{coordinationStrain:3, leadershipWindow:1} },
+    { label:"Costs are rising faster than the value we're seeing", weights:{costAmplification:3, operatingCost:2} },
+    { label:"No one owns AI-related decisions", weights:{executiveGovernance:3, shadowLogic:1} },
+    { label:"We don't know if we're using AI correctly at all", weights:{absorptionGap:3, capabilityStack:1} },
+  ]},
+  { q:"Where in the organisation does the pain sit most?", options:[
+    { label:"The executive team", weights:{executiveGovernance:2, leadershipWindow:2} },
+    { label:"Middle managers and team leads", weights:{leadershipBehaviour:3, coordinationStrain:1} },
+    { label:"IT / technical operations", weights:{capabilityStack:2, operatingArchitecture:2} },
+    { label:"The board", weights:{executiveGovernance:2, leadershipWindow:2} },
+  ]},
+  { q:"Which best describes the situation right now?", options:[
+    { label:"We're scaling AI use quickly and losing oversight", weights:{coordinationStrain:3, operationalCapacity:1} },
+    { label:"We've been at this a while without seeing results", weights:{absorptionGap:3, workshopModel:1} },
+    { label:"We're early and want to avoid other people's mistakes", weights:{leadershipWindow:2, capabilityStack:1} },
+    { label:"We're in the middle of a larger reorganisation", weights:{interimLeadership:3, organizationalCoherence:1} },
+  ]},
+  { q:"Is it visible, in practice, who makes AI-related decisions?", options:[
+    { label:"Yes, clearly to everyone", weights:{} },
+    { label:"No, it's unclear who decides what", weights:{executiveGovernance:2, shadowLogic:2} },
+    { label:"Decisions happen somewhere in the system and we're not quite sure where", weights:{shadowLogic:4} },
+  ]},
+  { q:"How does the cost picture on AI use feel?", options:[
+    { label:"Predictable and under control", weights:{} },
+    { label:"Rising, but we understand why", weights:{operatingCost:3} },
+    { label:"Rising, and we don't understand why", weights:{costAmplification:4, operatingArchitecture:1} },
+  ]},
+  { q:"What does the culture actually say — not what's written in the values document?", options:[
+    { label:"We talk openly about mistakes and uncertainty", weights:{} },
+    { label:"People optimise locally, at the expense of the whole", weights:{cultureSystem:3, organizationalCoherence:2} },
+    { label:"Not sure — we've never really tested it", weights:{cultureSystem:2, leadershipBehaviour:1} },
+  ]},
+  { q:"How long has the operating model stayed unchanged while AI use has grown?", options:[
+    { label:"Under 6 months", weights:{} },
+    { label:"6–18 months", weights:{operationalCapacity:2, operatingArchitecture:1} },
+    { label:"Over 18 months, no real redesign", weights:{operatingArchitecture:3, operationalCapacity:2, organizationalCoherence:1} },
+  ]},
+  { q:"What do you need most right now?", options:[
+    { label:"Understand the problem better", key:"understand", weights:{} },
+    { label:"Quantify the actual cost", key:"quantify", weights:{operatingCost:1, costAmplification:1} },
+    { label:"A concrete action plan", key:"plan", weights:{workshopModel:2} },
+    { label:"Someone to lead the change while the business keeps running", key:"interim", weights:{interimLeadership:3} },
+  ]},
+];
+
+const NEXT_STEPS = {
+  understand: { title:"Go deeper into the model", body:"See the full model hierarchy to understand how this model connects to the rest of the framework.", cta:"See the model hierarchy", action:"hierarchy" },
+  quantify: { title:"Put a number on it", body:"AI Operating Cost Simulator shows how architecture choices affect operating cost on your exact workload — same model, different architecture, different cost.", cta:"Open the simulator", href:"https://calc.buchemeier.no" },
+  plan: { title:"From diagnosis to action", body:"The AI Absorption Gap Workshop Model is built for exactly this: a structured process from capacity, through absorption capability, to realised value.", cta:"Book a conversation", href:"https://www.buchemeier.no/contact" },
+  interim: { title:"Let's talk", body:"The Interim Leadership Transition Model describes exactly this situation: transformation without stopping the business. Have a no-obligation conversation.", cta:"Book a conversation", href:"https://www.buchemeier.no/contact" }
+};
+
+/* ---------------------------------------------------------
+   STATE
+--------------------------------------------------------- */
+let view = "intro";
+let current = 0;
+let answers = [];
+let nextStepKey = "understand";
+
+const app = document.getElementById('app');
+
+function setActiveNav(){
+  document.getElementById('nav-diagnose').className = "nav-link" + (view!=="hierarchy" ? " active" : "");
+  document.getElementById('nav-hierarchy').className = "nav-link" + (view==="hierarchy" ? " active" : "");
+}
+
+function goHome(){ view="intro"; renderIntro(); }
+
+function renderIntro(){
+  setActiveNav();
+  app.innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">AI Operating Diagnosis</div>
+      <h1>Where is the <strong>friction</strong> in your organisation?</h1>
+      <p>8 short questions. No data stored. You'll get a concrete pointer to which of the 17 models in the Büchemeier framework are relevant to you right now — shown in full.</p>
+      <div class="hero-pov">Built for the same purpose as the AI Operating Cost Simulator: diagnosis before conversation.</div>
+    </div>
+    <div class="wrap">
+      <div class="panel">
+        <div class="panel-title">Before you start</div>
+        <ul class="intro-list">
+          <li>Takes under 2 minutes</li>
+          <li>No sign-up, nothing stored</li>
+          <li>See the full model poster for your diagnosis, not just a summary</li>
+        </ul>
+      </div>
+      <div class="nav-row" style="justify-content:flex-end;">
+        <button class="step-nav-btn primary" onclick="startQuiz()">Start the diagnosis →</button>
+      </div>
+    </div>
+  `;
+}
+
+function startQuiz(){
+  view="quiz"; current=0; answers=new Array(QUESTIONS.length).fill(null);
+  renderQuestion();
+}
+
+function renderSteps(){
+  let html = '<div class="steps-wrap"><div class="steps">';
+  QUESTIONS.forEach((q,i) => {
+    const state = i < current ? 'done' : (i===current ? 'active' : '');
+    html += `<div class="step-item ${state}"><div class="step-num">${i < current ? '✓' : i+1}</div><div class="step-label">${i+1}</div></div>`;
+    if(i < QUESTIONS.length-1) html += '<div class="step-connector"></div>';
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function renderQuestion(){
+  setActiveNav();
+  const q = QUESTIONS[current];
+  app.innerHTML = `
+    ${renderSteps()}
+    <div class="wrap">
+      <div class="panel">
+        <div class="qnum">Question ${current+1} of ${QUESTIONS.length}</div>
+        <div class="qtitle">${q.q}</div>
+        <div class="options">
+          ${q.options.map((o,i) => `<button class="opt" onclick="selectOption(${i})">${o.label}</button>`).join('')}
+        </div>
+      </div>
+      <div class="nav-row">
+        <button class="step-nav-btn" onclick="goBack()" ${current===0?'disabled':''}>← Back</button>
+        <span></span>
+      </div>
+    </div>
+  `;
+}
+
+function selectOption(i){
+  const q = QUESTIONS[current];
+  const opt = q.options[i];
+  answers[current] = opt;
+  if(opt.key) nextStepKey = opt.key;
+  if(current < QUESTIONS.length-1){ current++; renderQuestion(); }
+  else { scoreAndRender(); }
+}
+
+function goBack(){ if(current>0){ current--; renderQuestion(); } }
+
+function scoreAndRender(){
+  const scores = {};
+  Object.keys(MODELS).forEach(k => scores[k]=0);
+  answers.forEach(a => { if(!a) return; Object.entries(a.weights||{}).forEach(([k,v])=>{ scores[k]=(scores[k]||0)+v; }); });
+  const ranked = Object.entries(scores).filter(([k,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k])=>k);
+  const top = ranked.length ? ranked : ["absorptionGap","coordinationStrain","leadershipWindow"];
+  view="results";
+  renderResults(top);
+}
+
+function renderResults(top){
+  setActiveNav();
+  const primary = MODELS[top[0]];
+  const rest = top.slice(1).map(k => MODELS[k]);
+  const step = NEXT_STEPS[nextStepKey] || NEXT_STEPS.understand;
+  const ctaHtml = step.action === "hierarchy"
+    ? `<button class="cta-btn" onclick="showHierarchy()">${step.cta} →</button>`
+    : `<a class="cta-btn" href="${step.href}" target="_blank" rel="noopener">${step.cta} →</a>`;
+
+  app.innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">Your diagnosis</div>
+      <h1>Primary model identified</h1>
+    </div>
+    <div class="wrap">
+      <div class="result-hero">
+        <div class="rec-model-label">Primary model</div>
+        <h2>${primary.name}</h2>
+        <p>${primary.tag}</p>
+      </div>
+
+      <div class="model-card">
+        <div class="rank">01</div>
+        <div class="body">
+          <h3>${primary.name}</h3>
+          <p>${primary.tag}</p>
+          <div class="insight">${primary.insight}</div>
+          <div class="primary-poster">
+            <div class="thumb" onclick="openLightbox('${primary.img}','${primary.name}')">
+              <img src="${primary.img}" alt="${primary.name} — full model poster">
+            </div>
+            <div class="thumb-cap">🔍 Click to view the full model at full size</div>
+          </div>
+        </div>
+      </div>
+
+      ${rest.map((m,idx) => `
+        <div class="model-card">
+          <div class="rank">0${idx+2}</div>
+          <div class="body">
+            <h3>${m.name}</h3>
+            <p>${m.tag}</p>
+            <div class="insight">${m.insight}</div>
+            <div class="thumb" onclick="openLightbox('${m.img}','${m.name}')" style="max-width:340px;">
+              <img src="${m.img}" alt="${m.name} — full model poster">
+            </div>
+            <div class="thumb-cap">🔍 View the full model</div>
+          </div>
+        </div>
+      `).join('')}
+
+      <div class="next-step">
+        <div class="rec-model-label">Next step</div>
+        <h3>${step.title}</h3>
+        <p>${step.body}</p>
+        ${ctaHtml}
+      </div>
+
+      <div class="restart-row">
+        <button class="action-btn" onclick="restart()">↺ Take the diagnosis again</button>
+      </div>
+    </div>
+  `;
+}
+
+function showHierarchy(){
+  view="hierarchy";
+  setActiveNav();
+  app.innerHTML = `
+    <div class="hero">
+      <div class="hero-eyebrow">Model Hierarchy</div>
+      <h1>All 17 models — <strong>one framework</strong></h1>
+      <p>The models aren't standalone posters. They're one connected operating system for strategic leadership in an AI-driven organisation, arranged in four layers.</p>
+    </div>
+    <div class="wrap wide">
+      ${HIERARCHY.map((layer,i) => `
+        <div class="layer">
+          <div class="layer-head">
+            <div class="layer-num">${i+1}</div>
+            <div class="layer-title">${layer.title}</div>
+          </div>
+          <p class="layer-sub">${layer.sub}</p>
+          <div class="layer-grid">
+            ${layer.items.map(key => {
+              const m = getModel(key);
+              return `<div class="mcard" onclick="openLightbox('${m.img}','${m.name}')">
+                <img src="${m.img}" alt="${m.name}">
+                <div class="mcard-label">${m.name}</div>
+              </div>`;
+            }).join('')}
+          </div>
+        </div>
+      `).join('')}
+      <div class="restart-row">
+        <button class="action-btn" onclick="goHome()">← Back to the diagnosis</button>
+      </div>
+    </div>
+  `;
+}
+
+function restart(){ view="intro"; current=0; answers=[]; nextStepKey="understand"; renderIntro(); }
+
+function openLightbox(src, alt){
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox-img').alt = alt || "";
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(e){ if(e) e.stopPropagation(); document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', (e) => { if(e.key==='Escape') closeLightbox(); });
+
+window.startQuiz=startQuiz; window.selectOption=selectOption; window.goBack=goBack;
+window.restart=restart; window.goHome=goHome; window.showHierarchy=showHierarchy;
+window.openLightbox=openLightbox; window.closeLightbox=closeLightbox;
+
+renderIntro();
+</script>
+<!-- Cloudflare Web Analytics — privacy-friendly, no cookies -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "fce5c017e21546d38925ab4a645264e1"}'></script>
+</body>
+</html>
