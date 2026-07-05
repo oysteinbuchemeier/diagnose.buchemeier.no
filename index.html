@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Operating Diagnosis — Büchemeier Consulting</title>
 <meta property="og:title" content="AI Operating Diagnosis — Büchemeier Consulting">
-<meta property="og:description" content="8 questions. Find out which of the 17 models in the Büchemeier framework are relevant to your organisation right now.">
+<meta property="og:description" content="Where is your operating model starting to deform under AI pressure? An 8-question operational diagnosis.">
 <meta property="og:url" content="https://diagnose.buchemeier.no">
 <meta property="og:type" content="website">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%231A2332'/><text x='50%25' y='56%25' font-family='monospace' font-size='18' font-weight='bold' fill='%236CA4AB' text-anchor='middle' dominant-baseline='middle'>AI</text></svg>">
@@ -37,7 +37,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .hero-eyebrow{font-family:var(--mono);font-size:13px;color:var(--accent2);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:0.75rem}
 .hero h1{font-size:clamp(24px,4vw,38px);font-weight:300;letter-spacing:-0.03em;margin-bottom:0.5rem;line-height:1.15}
 .hero h1 strong{font-weight:500;color:#fff}
-.hero p{font-size:15px;color:var(--text2);max-width:520px;margin:0 auto}
+.hero p{font-size:15px;color:var(--text2);max-width:540px;margin:0 auto}
 .hero-pov{display:inline-block;margin-top:1.25rem;padding:8px 18px;background:rgba(108,164,171,0.1);border:1px solid rgba(108,164,171,0.25);border-radius:20px;font-size:13px;color:var(--accent2);font-style:italic;letter-spacing:0.01em}
 
 .wrap{max-width:720px;margin:0 auto;padding:1.5rem 2rem 4rem}
@@ -67,7 +67,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
   transition:border-color 0.15s,background 0.15s,color 0.15s;font-family:var(--sans);
 }
 .opt:hover{border-color:var(--border2);color:var(--text)}
-.opt.selected{border-color:var(--accent);background:var(--accent-bg);color:var(--accent2)}
 
 .nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem}
 .step-nav-btn{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius);padding:10px 20px;font-size:13px;font-family:var(--sans);color:var(--text2);cursor:pointer;transition:all 0.12s}
@@ -80,26 +79,39 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .intro-list li{font-size:13.5px;color:var(--text2);display:flex;gap:10px;align-items:flex-start}
 .intro-list li::before{content:'—';color:var(--accent2);font-family:var(--mono)}
 
-.result-hero{background:var(--bg2);border:1px solid rgba(108,164,171,0.25);border-radius:var(--radius-lg);padding:1.5rem 1.75rem;margin-bottom:1.25rem}
-.result-hero .rec-model-label{font-size:12px;font-family:var(--sans);font-weight:600;color:var(--accent2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px}
-.result-hero h2{font-size:24px;font-weight:400;color:#fff;margin:0 0 8px;letter-spacing:-0.01em}
-.result-hero p{font-size:14px;color:var(--text2);line-height:1.55;margin:0}
+/* results */
+.diag-label{font-family:var(--mono);font-size:12px;color:var(--accent2);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:8px}
+.diag-title{font-size:22px;font-weight:500;color:#fff;margin:0 0 14px;letter-spacing:-0.01em}
+.diag-body{font-size:15px;color:var(--text2);line-height:1.7}
+.diag-body p{margin-bottom:10px}
+.diag-body p:last-child{margin-bottom:0}
 
-.model-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;display:flex;gap:16px;align-items:flex-start}
-.model-card .rank{width:30px;height:30px;border-radius:50%;background:var(--bg3);border:1px solid var(--border2);color:var(--text3);font-family:var(--mono);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none}
-.model-card .body{flex:1;min-width:0}
-.model-card .body h3{margin:0 0 6px;font-size:16px;font-weight:500;color:var(--text)}
-.model-card .body>p{margin:0 0 10px;color:var(--text3);font-size:13.5px;line-height:1.55}
-.insight{background:rgba(108,164,171,0.08);border-left:2px solid var(--accent);padding:10px 14px;font-size:13px;color:var(--text2);line-height:1.55;border-radius:0 8px 8px 0;margin-bottom:12px}
+.flow-row{display:flex;flex-wrap:wrap;align-items:center;gap:0;margin:1.25rem 0 0.25rem}
+.flow-step{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;font-size:12.5px;color:var(--text2);flex:1 1 auto;min-width:120px;text-align:center;line-height:1.35}
+.flow-arrow{font-family:var(--mono);color:var(--accent2);padding:0 8px;font-size:15px;flex:0 0 auto}
 
-.thumb{display:block;width:100%;border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:zoom-in;background:var(--bg3)}
-.thumb img{display:block;width:100%;height:auto}
-.thumb-cap{font-family:var(--mono);font-size:12px;color:var(--text3);margin-top:8px}
-.primary-poster .thumb{max-height:480px}
-.primary-poster .thumb img{object-fit:contain}
+.section-label{font-family:var(--mono);font-size:11.5px;color:var(--text3);letter-spacing:0.08em;text-transform:uppercase;margin:1.75rem 0 0.75rem}
 
-.next-step{background:var(--bg2);border:1px solid rgba(45,212,160,0.25);border-radius:var(--radius-lg);padding:1.5rem 1.75rem;margin-top:1.5rem}
-.next-step .rec-model-label{font-size:12px;font-family:var(--sans);font-weight:600;color:var(--green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px}
+.secondary-item{border-left:2px solid var(--border2);padding:4px 0 4px 14px;margin-bottom:12px}
+.secondary-item .sec-label{font-size:13.5px;font-weight:500;color:var(--text);margin-bottom:3px}
+.secondary-item .sec-text{font-size:13px;color:var(--text3);line-height:1.5}
+
+.risk-list{list-style:none;display:flex;flex-direction:column;gap:8px}
+.risk-list li{font-size:13.5px;color:var(--text2);display:flex;gap:10px;align-items:flex-start}
+.risk-list li::before{content:'▸';color:var(--amber);flex:none}
+
+.focus-box{background:rgba(45,212,160,0.08);border:1px solid rgba(45,212,160,0.25);border-radius:10px;padding:14px 16px;margin-top:4px}
+.focus-box .focus-label{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:6px}
+.focus-box p{font-size:14px;color:var(--text);line-height:1.5}
+
+.related-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:0.5rem}
+.related-card{border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:zoom-in;background:var(--bg2);transition:border-color 0.15s}
+.related-card:hover{border-color:var(--accent)}
+.related-card img{display:block;width:100%;height:80px;object-fit:cover;object-position:top;background:var(--bg3)}
+.related-card .rc-label{padding:8px 10px 9px;font-size:11.5px;font-weight:500;color:var(--text2);line-height:1.3}
+
+.next-step{background:var(--bg2);border:1px solid rgba(108,164,171,0.25);border-radius:var(--radius-lg);padding:1.5rem 1.75rem;margin-top:1.75rem}
+.next-step .rec-model-label{font-size:12px;font-family:var(--sans);font-weight:600;color:var(--accent2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px}
 .next-step h3{margin:0 0 8px;font-size:17px;font-weight:500;color:var(--text)}
 .next-step p{margin:0 0 16px;color:var(--text2);font-size:13.5px;line-height:1.6}
 .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;padding:11px 22px;font-size:13.5px;font-family:var(--sans);font-weight:500;border-radius:8px;cursor:pointer;text-decoration:none;transition:opacity 0.15s}
@@ -131,9 +143,10 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex
 
 @media(max-width:640px){
   .wrap{padding:1.25rem 1.25rem 3rem}
-  .model-card{flex-direction:column}
   nav{padding:0 1.25rem}
   .step-label{display:none!important}
+  .flow-row{flex-direction:column;align-items:stretch}
+  .flow-arrow{transform:rotate(90deg);padding:4px 0;text-align:center}
 }
 </style>
 </head>
@@ -161,105 +174,30 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex
 
 <script>
 /* ---------------------------------------------------------
-   DATA
+   MODEL DATA (poster images, used as "Related models")
 --------------------------------------------------------- */
 const MODELS = {
-  coordinationStrain: {
-    name: "AI Coordination Strain Model",
-    tag: "When AI execution outpaces organisational coordination",
-    insight: "AI execution scales capacity. Sustainable value comes from closing the coordination strain — continuously, not as a one-off project.",
-    img: "assets/models/coordination-strain.png"
-  },
-  costAmplification: {
-    name: "AI Cost Amplification Model",
-    tag: "Why operational architecture matters more than model pricing alone",
-    insight: "Model pricing sets the baseline. Workflow architecture determines the real operating cost. A cheap model in a poor architecture can cost more than a premium model in a well-designed system.",
-    img: "assets/models/cost-amplification.png"
-  },
-  executiveGovernance: {
-    name: "AI Executive Governance Shift Model",
-    tag: "How AI reshapes executive responsibility, governance and operating models",
-    insight: "AI does not only change tools and tasks. It changes where responsibility lies, how decisions are made, and how executives must lead and govern together.",
-    img: "assets/models/executive-governance.png"
-  },
-  absorptionGap: {
-    name: "AI Absorption Gap Model",
-    tag: "Why AI capacity does not automatically become organisational value",
-    insight: "AI does not automatically create value. AI creates capacity. Value emerges only when the organisation can absorb, govern, prioritise and operationalise the consequences of that capacity.",
-    img: "assets/models/absorption-gap.png"
-  },
-  leadershipWindow: {
-    name: "AI Leadership Window Model",
-    tag: "From AI adoption to real-time leadership discipline",
-    insight: "AI maturity is accelerating faster than leadership maturity. The leadership window belongs to organisations that build real-time governance before AI becomes structural power.",
-    img: "assets/models/leadership-window.png"
-  },
-  interimLeadership: {
-    name: "Interim Leadership Transition Model",
-    tag: "Why interim leadership becomes a strategic capability in AI-driven organisations",
-    insight: "AI increases transition pressure faster than most organisations can redesign leadership capacity around it. Interim leadership is the mechanism that makes transformation possible without stopping the business.",
-    img: "assets/models/interim-leadership.png"
-  },
-  shadowLogic: {
-    name: "Shadow AI & Shadow Logic Model",
-    tag: "The hidden layer influencing how operational decisions are made",
-    insight: "AI tools may be visible. But the logic they introduce can be invisible. Real value comes when both the tools and the logic are governed.",
-    img: "assets/models/shadow-logic.png"
-  },
-  operatingCost: {
-    name: "AI Operating Cost Model",
-    tag: "Why cost grows differently as work becomes more autonomous",
-    insight: "Design for efficiency so value grows faster than cost. Understand and manage cost per workflow, per outcome, per use case.",
-    img: "assets/models/operating-cost.png"
-  },
-  cultureSystem: {
-    name: "Culture System Model",
-    tag: "How culture emerges from system dynamics, not values alone",
-    insight: "Culture is not created by values alone. It emerges from the interaction of strategy, leadership, incentives, structure and operational reality — reinforced over time.",
-    img: "assets/models/culture-system.png"
-  },
-  operatingArchitecture: {
-    name: "AI Operating Architecture",
-    tag: "Manage access risk, control costs, ensure continuity",
-    insight: "Same workload, different model paths, dramatically different operating economics. Don't rely on a single model — build architecture that adapts.",
-    img: "assets/models/operating-architecture.png"
-  },
-  operationalCapacity: {
-    name: "AI Operational Capacity Model",
-    tag: "How AI changes the way organisations create, coordinate and execute work at scale",
-    insight: "AI does not only improve efficiency. It changes the operational capacity ceiling of the organisation.",
-    img: "assets/models/operational-capacity.png"
-  },
-  organizationalCoherence: {
-    name: "The Organizational Coherence Model",
-    tag: "How organisations maintain coordinated force under complexity",
-    insight: "Complexity is inevitable. Fragmentation is optional. Organisational coherence determines whether pressure creates friction or coordinated force.",
-    img: "assets/models/organizational-coherence.png"
-  },
-  leadershipBehaviour: {
-    name: "Leadership Behaviour System Model",
-    tag: "How system friction shapes rational leadership behaviour",
-    insight: "Organisations don't get the leadership behaviour they want. They get the leadership behaviour the system makes rational and rewards.",
-    img: "assets/models/leadership-behaviour.png"
-  },
-  capabilityStack: {
-    name: "AI Capability Stack Model",
-    tag: "How AI capabilities are built, governed and operationalised across the enterprise",
-    insight: "AI capability is not a single tool — it is a stack. Real value emerges only when experience, workflows, data, governance and execution work together under an aligned operating model.",
-    img: "assets/models/capability-stack.png"
-  },
-  workshopModel: {
-    name: "AI Absorption Gap Workshop Model",
-    tag: "From AI-generated capacity to realised organisational value",
-    insight: "The size of the gap is not a technology problem. It is a leadership, operating model and governance problem.",
-    img: "assets/models/absorption-gap-workshop.png"
-  },
+  coordinationStrain: { name:"AI Coordination Strain Model", img:"assets/models/coordination-strain.png" },
+  costAmplification: { name:"AI Cost Amplification Model", img:"assets/models/cost-amplification.png" },
+  executiveGovernance: { name:"AI Executive Governance Shift Model", img:"assets/models/executive-governance.png" },
+  absorptionGap: { name:"AI Absorption Gap Model", img:"assets/models/absorption-gap.png" },
+  leadershipWindow: { name:"AI Leadership Window Model", img:"assets/models/leadership-window.png" },
+  interimLeadership: { name:"Interim Leadership Transition Model", img:"assets/models/interim-leadership.png" },
+  shadowLogic: { name:"Shadow AI & Shadow Logic Model", img:"assets/models/shadow-logic.png" },
+  operatingCost: { name:"AI Operating Cost Model", img:"assets/models/operating-cost.png" },
+  cultureSystem: { name:"Culture System Model", img:"assets/models/culture-system.png" },
+  operatingArchitecture: { name:"AI Operating Architecture", img:"assets/models/operating-architecture.png" },
+  operationalCapacity: { name:"AI Operational Capacity Model", img:"assets/models/operational-capacity.png" },
+  organizationalCoherence: { name:"The Organizational Coherence Model", img:"assets/models/organizational-coherence.png" },
+  leadershipBehaviour: { name:"Leadership Behaviour System Model", img:"assets/models/leadership-behaviour.png" },
+  capabilityStack: { name:"AI Capability Stack Model", img:"assets/models/capability-stack.png" },
+  workshopModel: { name:"AI Absorption Gap Workshop Model", img:"assets/models/absorption-gap-workshop.png" },
 };
-
 const EXTRA_MODELS = {
-  metaFramework: { name: "AI Operating Model Framework", img: "assets/models/meta-framework.png" },
-  costSimulator: { name: "AI Operating Cost Simulator", img: "assets/models/cost-simulator.png" }
+  metaFramework: { name:"AI Operating Model Framework", img:"assets/models/meta-framework.png" },
+  costSimulator: { name:"AI Operating Cost Simulator", img:"assets/models/cost-simulator.png" }
 };
+function getModel(key){ return MODELS[key] || EXTRA_MODELS[key]; }
 
 const HIERARCHY = [
   { title:"Core Framework", sub:"The six models that together form the operating system for enterprise AI.",
@@ -272,8 +210,74 @@ const HIERARCHY = [
     items:["operatingArchitecture","workshopModel"] }
 ];
 
-function getModel(key){ return MODELS[key] || EXTRA_MODELS[key]; }
+/* ---------------------------------------------------------
+   DIMENSIONS — the four operating pressures
+--------------------------------------------------------- */
+const SUBMODEL_DIMENSION = {
+  coordinationStrain:'coordination', executiveGovernance:'coordination', shadowLogic:'coordination', leadershipBehaviour:'coordination',
+  costAmplification:'economic', operatingCost:'economic', operatingArchitecture:'economic', capabilityStack:'economic',
+  absorptionGap:'absorption', operationalCapacity:'absorption', cultureSystem:'absorption', organizationalCoherence:'absorption',
+  leadershipWindow:'leadership', interimLeadership:'leadership', workshopModel:'leadership'
+};
 
+const DIMENSIONS = {
+  coordination: {
+    label: "Executive Coordination Pressure",
+    flow: ["AI adoption accelerates","Decision ownership stays informal","Coordination overhead rises","Execution speed drops"],
+    risks: ["Delayed decisions","Local optimisation replacing shared priorities","Duplicated initiatives across functions","Coordination overhead quietly becoming the real cost centre"],
+    focus: "Clarify decision ownership before scaling AI execution further.",
+    secondaryLine: "Decision ownership is also under pressure — who owns what is not fully settled.",
+    variants: {
+      coordinationStrain: "AI activity is spreading faster than decision ownership is stabilising. The organisation is still coordinating through people, not structure. That works for a while. Then coordination overhead starts replacing execution speed.",
+      executiveGovernance: "Responsibility for AI decisions moved before the org chart caught up. Functions that used to run in parallel now depend on each other in ways nobody assigned. The result is shared outcomes with no shared owner.",
+      shadowLogic: "Decisions are increasingly shaped by AI systems that nobody explicitly authorised to shape them. The tools are visible. The logic they introduce usually isn't. That gap is where governance quietly stops governing.",
+      leadershipBehaviour: "Leaders are behaving exactly as the system rewards them to. If that behaviour looks fragmented, local, or short-term, the system — not the people — is producing it. Fixing behaviour without fixing the system just relocates the problem."
+    }
+  },
+  economic: {
+    label: "Economic & Architecture Pressure",
+    flow: ["Model usage scales","Orchestration depth grows","Retries and context expand","Cost outpaces value"],
+    risks: ["Non-linear cost growth as workflows compound","Unpredictable unit economics","Governance friction building around spend","Cost overtaking realised value"],
+    focus: "Instrument cost per workflow before adding further orchestration depth.",
+    secondaryLine: "Cost visibility is also softening as orchestration and workflow complexity increase.",
+    variants: {
+      costAmplification: "The cost problem is probably not the model. It's the architecture around the model. As orchestration depth grows, small inefficiencies compound into real operating cost.",
+      operatingCost: "Cost is growing in a predictable direction, but the shape of that growth changes with autonomy. Assistive use is cheap. Agentic use is not. Most organisations price the first and scale straight into the second.",
+      operatingArchitecture: "The same workload can produce radically different economics depending on architecture alone. Relying on a single model path is a cost decision, whether or not anyone made it consciously.",
+      capabilityStack: "Capability is being added faster than the stack underneath it is being aligned. Tools, data, governance and execution are each moving — but not necessarily together."
+    }
+  },
+  absorption: {
+    label: "Organisational Absorption Pressure",
+    flow: ["AI capacity expands","Absorption capability lags","Unrealised capacity accumulates","Value leakage sets in"],
+    risks: ["Pilot fatigue","Strategic noise without decisions attached","Shadow AI use outside governed paths","Capacity generated but never converted to value"],
+    focus: "Build absorption capacity — mandate, ownership, governance — before adding more AI capacity.",
+    secondaryLine: "The organisation is also generating more AI capacity than it is currently absorbing.",
+    variants: {
+      absorptionGap: "AI is increasing execution capacity faster than the organisation can absorb operational change. That usually creates activity before coherence.",
+      operationalCapacity: "The capacity ceiling has moved. The operating model underneath it may not have. Running expanded capacity through an unchanged structure is where the strain tends to surface first.",
+      cultureSystem: "What the culture rewards and what it claims to value are drifting apart under the pressure of faster execution. Nobody planned that. Systems rarely announce it either.",
+      organizationalCoherence: "Complexity itself is not the problem. Fragmentation is. Right now more of the pressure is turning into friction than into coordinated force."
+    }
+  },
+  leadership: {
+    label: "Transitional Leadership Pressure",
+    flow: ["Change tempo increases","Leadership bandwidth stays fixed","Existing structures strain","Execution stability weakens"],
+    risks: ["Leadership overload","Operating model mismatch with current execution needs","Momentum loss during redesign","Execution instability while structures catch up"],
+    focus: "Add transition capacity so redesign can happen without stopping delivery.",
+    secondaryLine: "Leadership bandwidth is also being stretched by the pace of change.",
+    variants: {
+      leadershipWindow: "AI maturity is running ahead of leadership maturity, and the gap is still widening. Organisations that close it early get to set the terms. The ones that don't inherit whatever terms are left.",
+      interimLeadership: "The pace of change has outrun the leadership bandwidth available to manage it. That's not a hiring failure. It's a timing problem, and it has a specific structural answer.",
+      workshopModel: "The gap between what AI creates and what the organisation realises isn't a technology question. It's a leadership, governance and operating-model question — and it usually needs a structured pass, not another initiative."
+    }
+  }
+};
+
+/* ---------------------------------------------------------
+   QUESTIONS — weights still target individual sub-models,
+   which roll up into the four dimensions above.
+--------------------------------------------------------- */
 const QUESTIONS = [
   { q:"Where is the friction coming from right now?", options:[
     { label:"Decisions take too long", weights:{coordinationStrain:3, leadershipWindow:1} },
@@ -322,7 +326,7 @@ const QUESTIONS = [
 ];
 
 const NEXT_STEPS = {
-  understand: { title:"Go deeper into the model", body:"See the full model hierarchy to understand how this model connects to the rest of the framework.", cta:"See the model hierarchy", action:"hierarchy" },
+  understand: { title:"Go deeper into the framework", body:"See the full model hierarchy to understand how this pressure connects to the rest of the framework.", cta:"See the model hierarchy", action:"hierarchy" },
   quantify: { title:"Put a number on it", body:"AI Operating Cost Simulator shows how architecture choices affect operating cost on your exact workload — same model, different architecture, different cost.", cta:"Open the simulator", href:"https://calc.buchemeier.no" },
   plan: { title:"From diagnosis to action", body:"The AI Absorption Gap Workshop Model is built for exactly this: a structured process from capacity, through absorption capability, to realised value.", cta:"Book a conversation", href:"https://www.buchemeier.no/contact" },
   interim: { title:"Let's talk", body:"The Interim Leadership Transition Model describes exactly this situation: transformation without stopping the business. Have a no-obligation conversation.", cta:"Book a conversation", href:"https://www.buchemeier.no/contact" }
@@ -350,8 +354,8 @@ function renderIntro(){
   app.innerHTML = `
     <div class="hero">
       <div class="hero-eyebrow">AI Operating Diagnosis</div>
-      <h1>Where is the <strong>friction</strong> in your organisation?</h1>
-      <p>8 short questions. No data stored. You'll get a concrete pointer to which of the 17 models in the Büchemeier framework are relevant to you right now — shown in full.</p>
+      <h1>Where is your <strong>operating model</strong> starting to deform under AI pressure?</h1>
+      <p>8 short questions. No data stored. Not a model match — an operational read on where AI adoption is outpacing the structure underneath it.</p>
       <div class="hero-pov">Built for the same purpose as the AI Operating Cost Simulator: diagnosis before conversation.</div>
     </div>
     <div class="wrap">
@@ -360,7 +364,7 @@ function renderIntro(){
         <ul class="intro-list">
           <li>Takes under 2 minutes</li>
           <li>No sign-up, nothing stored</li>
-          <li>See the full model poster for your diagnosis, not just a summary</li>
+          <li>You'll get a primary diagnosis, related dynamics, and the models behind them — not just a name</li>
         </ul>
       </div>
       <div class="nav-row" style="justify-content:flex-end;">
@@ -419,65 +423,105 @@ function selectOption(i){
 function goBack(){ if(current>0){ current--; renderQuestion(); } }
 
 function scoreAndRender(){
-  const scores = {};
-  Object.keys(MODELS).forEach(k => scores[k]=0);
-  answers.forEach(a => { if(!a) return; Object.entries(a.weights||{}).forEach(([k,v])=>{ scores[k]=(scores[k]||0)+v; }); });
-  const ranked = Object.entries(scores).filter(([k,v])=>v>0).sort((a,b)=>b[1]-a[1]).slice(0,3).map(([k])=>k);
-  const top = ranked.length ? ranked : ["absorptionGap","coordinationStrain","leadershipWindow"];
-  view="results";
-  renderResults(top);
+  // per-submodel scores (raw)
+  const subScores = {};
+  Object.keys(SUBMODEL_DIMENSION).forEach(k => subScores[k]=0);
+  answers.forEach(a => { if(!a) return; Object.entries(a.weights||{}).forEach(([k,v])=>{ subScores[k]=(subScores[k]||0)+v; }); });
+
+  // roll up into dimension scores
+  const dimScores = { coordination:0, economic:0, absorption:0, leadership:0 };
+  Object.entries(subScores).forEach(([sub,val]) => {
+    const dim = SUBMODEL_DIMENSION[sub];
+    if(dim) dimScores[dim] += val;
+  });
+
+  const rankedDims = Object.entries(dimScores).sort((a,b)=>b[1]-a[1]);
+  let primaryDim = rankedDims[0][0];
+  if(rankedDims[0][1] === 0){ primaryDim = "coordination"; } // fallback
+
+  const secondaryDims = rankedDims.slice(1).filter(([k,v]) => v > 0).map(([k]) => k).slice(0,2);
+
+  // pick variant: highest-scoring submodel within the primary dimension
+  const subsInPrimary = Object.entries(SUBMODEL_DIMENSION).filter(([k,d]) => d===primaryDim).map(([k]) => k);
+  let variantKey = subsInPrimary[0];
+  let bestScore = -1;
+  subsInPrimary.forEach(k => { if(subScores[k] > bestScore){ bestScore = subScores[k]; variantKey = k; } });
+
+  view = "results";
+  renderResults(primaryDim, secondaryDims, variantKey, subsInPrimary);
 }
 
-function renderResults(top){
+function renderResults(primaryDim, secondaryDims, variantKey, subsInPrimary){
   setActiveNav();
-  const primary = MODELS[top[0]];
-  const rest = top.slice(1).map(k => MODELS[k]);
+  const dim = DIMENSIONS[primaryDim];
+  const variantText = dim.variants[variantKey];
   const step = NEXT_STEPS[nextStepKey] || NEXT_STEPS.understand;
   const ctaHtml = step.action === "hierarchy"
     ? `<button class="cta-btn" onclick="showHierarchy()">${step.cta} →</button>`
     : `<a class="cta-btn" href="${step.href}" target="_blank" rel="noopener">${step.cta} →</a>`;
 
+  // related models: all submodels in primary dimension + one representative from each secondary dimension
+  let relatedKeys = [...subsInPrimary];
+  secondaryDims.forEach(d => {
+    const subs = Object.entries(SUBMODEL_DIMENSION).filter(([k,dd]) => dd===d).map(([k]) => k);
+    relatedKeys = relatedKeys.concat(subs);
+  });
+  relatedKeys = [...new Set(relatedKeys)];
+
   app.innerHTML = `
     <div class="hero">
-      <div class="hero-eyebrow">Your diagnosis</div>
-      <h1>Primary model identified</h1>
+      <div class="hero-eyebrow">AI Operating Diagnosis</div>
+      <h1>Primary diagnosis identified</h1>
     </div>
     <div class="wrap">
-      <div class="result-hero">
-        <div class="rec-model-label">Primary model</div>
-        <h2>${primary.name}</h2>
-        <p>${primary.tag}</p>
-      </div>
+      <div class="panel">
+        <div class="diag-label">Primary diagnosis</div>
+        <div class="diag-title">${dim.label}</div>
+        <div class="diag-body"><p>${variantText}</p></div>
 
-      <div class="model-card">
-        <div class="rank">01</div>
-        <div class="body">
-          <h3>${primary.name}</h3>
-          <p>${primary.tag}</p>
-          <div class="insight">${primary.insight}</div>
-          <div class="primary-poster">
-            <div class="thumb" onclick="openLightbox('${primary.img}','${primary.name}')">
-              <img src="${primary.img}" alt="${primary.name} — full model poster">
-            </div>
-            <div class="thumb-cap">🔍 Click to view the full model at full size</div>
-          </div>
+        <div class="flow-row">
+          ${dim.flow.map((step,i) => `
+            <div class="flow-step">${step}</div>
+            ${i < dim.flow.length-1 ? '<div class="flow-arrow">→</div>' : ''}
+          `).join('')}
         </div>
       </div>
 
-      ${rest.map((m,idx) => `
-        <div class="model-card">
-          <div class="rank">0${idx+2}</div>
-          <div class="body">
-            <h3>${m.name}</h3>
-            <p>${m.tag}</p>
-            <div class="insight">${m.insight}</div>
-            <div class="thumb" onclick="openLightbox('${m.img}','${m.name}')" style="max-width:340px;">
-              <img src="${m.img}" alt="${m.name} — full model poster">
+      ${secondaryDims.length ? `
+        <div class="panel">
+          <div class="panel-title">Secondary dynamics identified</div>
+          ${secondaryDims.map(d => `
+            <div class="secondary-item">
+              <div class="sec-label">${DIMENSIONS[d].label}</div>
+              <div class="sec-text">${DIMENSIONS[d].secondaryLine}</div>
             </div>
-            <div class="thumb-cap">🔍 View the full model</div>
-          </div>
+          `).join('')}
         </div>
-      `).join('')}
+      ` : ''}
+
+      <div class="panel">
+        <div class="panel-title">Likely next-stage risks</div>
+        <ul class="risk-list">
+          ${dim.risks.map(r => `<li>${r}</li>`).join('')}
+        </ul>
+        <div class="focus-box">
+          <div class="focus-label">Recommended focus</div>
+          <p>${dim.focus}</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Related models</div>
+        <div class="related-grid">
+          ${relatedKeys.map(k => {
+            const m = getModel(k);
+            return `<div class="related-card" onclick="openLightbox('${m.img}','${m.name}')">
+              <img src="${m.img}" alt="${m.name}">
+              <div class="rc-label">${m.name}</div>
+            </div>`;
+          }).join('')}
+        </div>
+      </div>
 
       <div class="next-step">
         <div class="rec-model-label">Next step</div>
