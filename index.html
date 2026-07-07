@@ -60,10 +60,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 
 .map-hint{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--text3);margin-top:4px}
 
-.browse-link{font-family:var(--mono);font-size:12.5px;color:var(--text3);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.browse-link-quiet{display:block;text-align:center;margin-top:14px;opacity:0.7;font-size:11.5px}
-.browse-link-quiet:hover{opacity:1}
-.browse-link:hover{color:var(--accent2)}
 
 .all-list{display:flex;flex-direction:column;gap:8px}
 .all-row{display:flex;align-items:center;gap:14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;cursor:pointer;transition:border-color 0.12s}
@@ -157,9 +153,8 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex
 <body>
 
 <nav>
-  <div class="nav-logo">BÜCHEMEIER <span>CONSULTING</span></div>
+  <div class="nav-logo" style="cursor:pointer;" onclick="showMap()">BÜCHEMEIER <span>CONSULTING</span></div>
   <div class="nav-links">
-    <a href="#" class="nav-link" id="nav-map" onclick="showMap();return false;">Map</a>
     <a class="nav-link ext" href="https://calc.buchemeier.no" target="_blank" rel="noopener">Cost Simulator ↗</a>
   </div>
 </nav>
@@ -444,7 +439,7 @@ let centerOpen = false;
 const app = document.getElementById('app');
 
 function setActiveNav(){
-  document.getElementById('nav-map').className = "nav-link active";
+  // no persistent top-nav state anymore — logo is the only nav element, always goes home
 }
 
 function showMap(){
@@ -558,7 +553,6 @@ function renderMap(){
     <div class="wrap">
       <div class="map-box">${buildMapSVG()}</div>
       <div class="map-hint">Line thickness = connection strength · two arrows = mutual influence</div>
-      <span class="browse-link browse-link-quiet" onclick="showAll()">Browse all 17 assets →</span>
       <div class="center-overview ${centerOpen ? 'open' : ''}" id="center-overview">
         <h3>${META_OVERVIEW.title}</h3>
         <p>${META_OVERVIEW.text}</p>
