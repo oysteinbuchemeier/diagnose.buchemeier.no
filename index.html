@@ -316,6 +316,7 @@ const TOOLS = {
   costSimulator: {
     name:"AI Operating Cost Simulator",
     desc:"Same workload, same model — simulate how architecture choices change your actual operating cost.",
+    keyInsight:"The same AI workload can produce radically different operating economics depending on architecture, orchestration, routing and operational control.",
     href:"https://calc.buchemeier.no",
     cta:"Open the simulator",
     img:"assets/models/cost-simulator.png"
@@ -325,6 +326,7 @@ const TOOLS = {
 const META_OVERVIEW = {
   title: "AI Operating Model Framework",
   text: "This map shows how AI-driven pressure moves through an organisation — across coordination, governance, cost, capacity, leadership and architecture. The mechanisms aren't independent. Pressure in one drives strain in another, in a specific direction.",
+  keyInsight:"AI value is created at the intersection of capability, architecture, governance and organisational readiness — not by model pricing alone.",
   img: "assets/models/meta-framework.png"
 };
 
@@ -544,10 +546,14 @@ function renderMap(){
       <div class="map-box">${buildMapSVG()}</div>
       <div class="map-hint">Click a mechanism to explore · click the centre for an overview</div>
       <div class="map-hint" style="margin-top:6px;">Every arrow is a real, direct influence — thicker = more underlying model links. Where two mechanisms influence each other both ways, you'll see two separate arrows.</div>
-      <div class="browse-row"><span class="browse-link" onclick="showAll()">Browse all 17 models →</span></div>
+      <div class="browse-row"><span class="browse-link" onclick="showAll()">Browse all 17 assets →</span></div>
       <div class="center-overview ${centerOpen ? 'open' : ''}" id="center-overview">
         <h3>${META_OVERVIEW.title}</h3>
         <p>${META_OVERVIEW.text}</p>
+        <div class="key-insight" style="margin:0 0 12px;">
+          <div class="ki-mark">"</div>
+          <div class="ki-text">${META_OVERVIEW.keyInsight}</div>
+        </div>
         <a class="thumb-link" onclick="openLightbox('${META_OVERVIEW.img}','${META_OVERVIEW.title}')">🔍 View the full framework poster</a>
       </div>
     </div>
@@ -661,6 +667,10 @@ function renderToolCard(toolKey){
       <div class="tool-text">
         <h4>${t.name}</h4>
         <p>${t.desc}</p>
+        <div class="key-insight" style="margin:10px 0 0;">
+          <div class="ki-mark">"</div>
+          <div class="ki-text">${t.keyInsight}</div>
+        </div>
       </div>
       <a class="cta-btn" href="${t.href}" target="_blank" rel="noopener">${t.cta} →</a>
     </div>
