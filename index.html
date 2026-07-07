@@ -104,6 +104,21 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .chip-verb{font-style:italic;color:var(--accent2);font-size:11.5px}
 .chip-in{border-style:dashed}
 
+.trace-btn{
+  margin-top:12px;background:none;border:1px dashed var(--border2);border-radius:8px;
+  padding:8px 14px;font-size:12.5px;font-family:var(--mono);color:var(--accent2);cursor:pointer;transition:all 0.12s;
+}
+.trace-btn:hover{border-color:var(--accent);background:var(--accent-bg)}
+.chain-panel{display:none;margin-top:12px;padding:14px 16px;background:var(--bg3);border-radius:10px;border:1px solid var(--border)}
+.chain-panel.open{display:block}
+.chain-label{font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:0.05em;text-transform:uppercase;margin-bottom:10px}
+.chain-flow{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:13px;line-height:1.8}
+.chain-node{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:4px 10px;color:var(--text);cursor:pointer;transition:border-color 0.12s;font-weight:500}
+.chain-node:hover{border-color:var(--accent)}
+.chain-arrow{color:var(--text3);font-size:12px;white-space:nowrap}
+.chain-arrow em{color:var(--accent2);font-style:italic}
+.chain-empty{font-size:13px;color:var(--text3);font-style:italic}
+
 .tool-card{background:rgba(108,164,171,0.08);border:1px solid rgba(108,164,171,0.25);border-radius:var(--radius-lg);padding:1.1rem 1.4rem;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
 .tool-card .tool-text h4{font-size:15px;color:var(--text);margin-bottom:4px}
 .tool-card .tool-text p{font-size:13px;color:var(--text2)}
@@ -288,6 +303,56 @@ function drivenBy(modelKey){
     });
   });
   return incoming;
+}
+
+// find the longest simple downstream causal chain starting from a model,
+// following "causes" edges without revisiting a node (avoids the one mutual loop)
+function longestChainFrom(startKey){
+  let best = [];
+  function dfs(node, path, visited){
+    const outs = (MODELS[node].causes || []);
+    let extended = false;
+    outs.forEach(edge => {
+      if(!visited.has(edge.to)){
+        extended = true;
+        visited.add(edge.to);
+        path.push({ from: node, to: edge.to, verb: edge.verb });
+        dfs(edge.to, path, visited);
+        path.pop();
+        visited.delete(edge.to);
+      }
+    });
+    if(!extended && path.length > best.length) best = path.slice();
+  }
+  dfs(startKey, [], new Set([startKey]));
+  return best;
+}
+
+function toggleChain(key){
+  const panel = document.getElementById('chain-' + key);
+  if(!panel) return;
+  if(panel.classList.contains('open')){
+    panel.classList.remove('open');
+    return;
+  }
+  const chain = longestChainFrom(key);
+  if(!chain.length){
+    panel.innerHTML = `<div class="chain-empty">This model doesn't drive anything further downstream — it's an endpoint in the current graph.</div>`;
+  } else {
+    const nodeHtml = (k) => {
+      const cat = categoryOf(k);
+      return `<span class="chain-node" onclick="event.stopPropagation();showCategory('${cat}','${k}')">${MODELS[k].name}</span>`;
+    };
+    let html = `<div class="chain-label">Longest downstream chain (${chain.length} hop${chain.length>1?'s':''})</div><div class="chain-flow">`;
+    html += nodeHtml(chain[0].from);
+    chain.forEach(edge => {
+      html += `<span class="chain-arrow">— <em>${edge.verb}</em> →</span>`;
+      html += nodeHtml(edge.to);
+    });
+    html += `</div>`;
+    panel.innerHTML = html;
+  }
+  panel.classList.add('open');
 }
 
 /* ---------------------------------------------------------
@@ -541,6 +606,10 @@ function renderModelCard(key){
         <div class="connected-label" style="margin-top:10px;">← Driven by</div>
         <div class="chip-row">${chipsIn}</div>
       ` : ''}
+      ${outgoing.length ? `
+        <button class="trace-btn" onclick="toggleChain('${key}')">Trace the chain →</button>
+        <div class="chain-panel" id="chain-${key}"></div>
+      ` : ''}
     </div>
   `;
 }
@@ -624,7 +693,7 @@ function closeLightbox(e){ if(e) e.stopPropagation(); document.getElementById('l
 document.addEventListener('keydown', (e) => { if(e.key==='Escape') closeLightbox(); });
 
 window.showMap=showMap; window.showCategory=showCategory; window.toggleCenter=toggleCenter; window.showAll=showAll;
-window.openLightbox=openLightbox; window.closeLightbox=closeLightbox;
+window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.toggleChain=toggleChain;
 
 renderMap();
 </script>
