@@ -59,6 +59,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 }
 
 .map-hint{text-align:center;font-family:var(--mono);font-size:11.5px;color:var(--text3);margin-top:4px}
+
 .browse-row{text-align:center;margin-top:1.25rem}
 .browse-link{font-family:var(--mono);font-size:12.5px;color:var(--text3);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 .browse-link:hover{color:var(--accent2)}
@@ -96,6 +97,14 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .symptom-list{list-style:none;display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
 .symptom-list li{font-size:13px;color:var(--text2);display:flex;gap:8px;align-items:flex-start}
 .symptom-list li::before{content:'▸';color:var(--amber);flex:none;font-size:11px;margin-top:2px}
+
+.key-insight{display:flex;gap:10px;align-items:flex-start;background:rgba(108,164,171,0.08);border-left:2px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 14px;margin:12px 0}
+.key-insight .ki-mark{font-family:Georgia,serif;font-size:28px;line-height:0.6;color:var(--accent2);flex:none;margin-top:6px}
+.key-insight .ki-text{font-size:13.5px;color:var(--text);line-height:1.55;font-style:italic}
+
+.recommendation{margin-top:14px;padding:12px 14px;background:rgba(45,212,160,0.07);border:1px solid rgba(45,212,160,0.22);border-radius:8px}
+.recommendation .rec-label{font-family:var(--mono);font-size:10.5px;color:var(--green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.recommendation .rec-text{font-size:13px;color:var(--text2);line-height:1.5}
 
 .connected-label{font-family:var(--mono);font-size:10.5px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin:4px 0 6px}
 .chip-row{display:flex;flex-wrap:wrap;gap:6px}
@@ -185,90 +194,120 @@ const MODELS = {
     name:"AI Coordination Strain Model", img:"assets/models/coordination-strain.png",
     mechanism:"AI execution scales faster than coordination can absorb it.",
     symptoms:["Rising decision queues","Orchestration debt and manual handovers","Accountability fragmenting across functions","Shadow AI use outside governed paths"],
-    causes:[ { to:"organizationalCoherence", verb:"erodes" } ]
+    keyInsight:"AI execution scales capacity. Sustainable value comes from closing coordination strain — continuously.",
+    recommendation:"Instrument coordination load as an operational metric before adding more AI-driven throughput.",
+    causes:[ { to:"organizationalCoherence", verb:"erodes" }, { to:"costAmplification", verb:"compounds" } ]
   },
   organizationalCoherence: {
     name:"The Organizational Coherence Model", img:"assets/models/organizational-coherence.png",
     mechanism:"Complexity is inevitable. Fragmentation is optional.",
     symptoms:["Local optimisation at the expense of the whole","Siloed information and decisions","Unclear ownership at handoff points","Rising process and rework drag"],
-    causes:[ { to:"cultureSystem", verb:"shapes" }, { to:"leadershipBehaviour", verb:"constrains" } ]
+    keyInsight:"Complexity is inevitable. Fragmentation is optional. Organisational coherence determines whether pressure creates friction or coordinated force.",
+    recommendation:"Align decision principles and execution rhythm before adding new coordination structures.",
+    causes:[ { to:"cultureSystem", verb:"shapes" }, { to:"leadershipBehaviour", verb:"constrains" }, { to:"coordinationStrain", verb:"reinforces" } ]
   },
   executiveGovernance: {
     name:"AI Executive Governance Shift Model", img:"assets/models/executive-governance.png",
     mechanism:"Responsibility for AI decisions moved before the org chart caught up.",
     symptoms:["Unclear decision ownership across functions","Outcomes depending on shared, unassigned accountability","Governance structures lagging execution tempo"],
-    causes:[ { to:"coordinationStrain", verb:"produces" }, { to:"shadowLogic", verb:"creates blind spots for" }, { to:"leadershipWindow", verb:"widens" } ]
+    keyInsight:"AI does not only change tools and tasks. It changes where responsibility lies, how decisions are made, and how executives must lead and govern together.",
+    recommendation:"Assign explicit ownership for AI decisions before expanding cross-functional AI workflows.",
+    causes:[ { to:"coordinationStrain", verb:"produces" }, { to:"shadowLogic", verb:"creates blind spots for" }, { to:"leadershipWindow", verb:"widens" }, { to:"operatingArchitecture", verb:"constrains" } ]
   },
   shadowLogic: {
     name:"Shadow AI & Shadow Logic Model", img:"assets/models/shadow-logic.png",
     mechanism:"The tools are visible. The logic they introduce often isn't.",
     symptoms:["AI-shaped prioritisation nobody explicitly approved","Informal AI workflows outside defined processes","Decision drift with no audit trail"],
+    keyInsight:"AI tools may be visible. But the logic they introduce can be invisible. Real value comes when both the tools and the logic are governed.",
+    recommendation:"Instrument decision observability — surface where AI is shaping reasoning, not just where it's installed.",
     causes:[ { to:"coordinationStrain", verb:"amplifies" } ]
   },
   operatingCost: {
     name:"AI Operating Cost Model", img:"assets/models/operating-cost.png",
     mechanism:"Cost grows differently as work becomes more autonomous.",
     symptoms:["Assistive-use pricing assumptions applied to agentic use","Unit economics drifting as autonomy increases","Cost per workflow not tracked or understood"],
-    causes:[]
+    keyInsight:"Design for efficiency so value grows faster than cost. Understand and manage cost per workflow, per outcome, per use case.",
+    recommendation:"Track cost per workflow tier separately — assistive, simple, and agentic scale at different rates.",
+    causes:[ { to:"executiveGovernance", verb:"forces scrutiny of" } ]
   },
   costAmplification: {
     name:"AI Cost Amplification Model", img:"assets/models/cost-amplification.png",
     mechanism:"Architecture amplifies cost more than model pricing does.",
     symptoms:["Retries and context growth compounding spend","Orchestration depth multiplying calls silently","Non-linear cost curves with no clear driver"],
+    keyInsight:"Model pricing sets the baseline. Workflow architecture determines the real operating cost. A cheap model in a poor architecture can cost more than a premium model in a well-designed system.",
+    recommendation:"Audit orchestration depth and retry rates before switching models to control cost.",
     causes:[ { to:"operatingCost", verb:"drives" } ]
   },
   absorptionGap: {
     name:"AI Absorption Gap Model", img:"assets/models/absorption-gap.png",
     mechanism:"AI creates capacity. It doesn't create value on its own.",
     symptoms:["Rising activity without proportional value","Decision bottlenecks despite more capacity","Fragmented ownership of AI-generated output","Strategic noise with no decision attached"],
-    causes:[ { to:"coordinationStrain", verb:"floods" }, { to:"workshopModel", verb:"requires" } ]
+    keyInsight:"AI does not automatically create value. AI creates capacity. Value emerges only when the organisation can absorb, govern, prioritise and operationalise the consequences of that capacity.",
+    recommendation:"Measure the gap between capacity generated and capacity absorbed — that gap is the actual leadership problem.",
+    causes:[ { to:"coordinationStrain", verb:"floods" }, { to:"workshopModel", verb:"requires" }, { to:"costAmplification", verb:"wastes" } ]
   },
   operationalCapacity: {
     name:"AI Operational Capacity Model", img:"assets/models/operational-capacity.png",
     mechanism:"The capacity ceiling moved. The operating model underneath it may not have.",
     symptoms:["Static workflows under dynamic load","Linear-scaling assumptions no longer holding","Coordination bottlenecks appearing under new throughput"],
+    keyInsight:"AI does not only improve efficiency. It changes the operational capacity ceiling of the organisation.",
+    recommendation:"Redesign workflows for parallel, adaptive execution rather than scaling the old linear process.",
     causes:[ { to:"absorptionGap", verb:"widens" } ]
   },
   workshopModel: {
     name:"AI Absorption Gap Workshop Model", img:"assets/models/absorption-gap-workshop.png",
     mechanism:"Closing the absorption gap is a structured process, not a one-off initiative.",
     symptoms:["Repeated pilots that never convert to scale","No clear path from capacity to realised value","Leakage between capacity, governance and outcome"],
+    keyInsight:"AI does not automatically create value. AI creates capacity. Value emerges only when the organisation can absorb, govern, prioritise and operationalise the consequences of that capacity.",
+    recommendation:"Run the three-layer assessment — capacity, absorption, realised value — before committing to a new AI initiative.",
     causes:[]
   },
   leadershipWindow: {
     name:"AI Leadership Window Model", img:"assets/models/leadership-window.png",
     mechanism:"Leadership maturity lags AI maturity by a widening, measurable margin.",
     symptoms:["Decision latency becoming visible under faster execution","Ownership ambiguity for AI-driven outcomes","Governance cadence too slow for real-time AI"],
+    keyInsight:"AI maturity is accelerating faster than leadership maturity. The leadership window belongs to organisations that build real-time governance before AI becomes structural power.",
+    recommendation:"Move governance cadence from quarterly to continuous before the leadership gap peaks.",
     causes:[ { to:"interimLeadership", verb:"creates demand for" }, { to:"leadershipBehaviour", verb:"shapes" } ]
   },
   interimLeadership: {
     name:"Interim Leadership Transition Model", img:"assets/models/interim-leadership.png",
     mechanism:"Transition pressure exceeds the leadership bandwidth available to absorb it.",
     symptoms:["Existing leaders stretched beyond capacity","Capability gaps in critical areas","Operating model mismatched to current execution needs"],
+    keyInsight:"AI increases transition pressure faster than most organisations can redesign leadership capacity around it. Interim leadership is the mechanism that makes transformation possible without stopping the business.",
+    recommendation:"Bring in transition capacity before the gap forces a choice between stability and redesign.",
     causes:[ { to:"workshopModel", verb:"enables" } ]
   },
   leadershipBehaviour: {
     name:"Leadership Behaviour System Model", img:"assets/models/leadership-behaviour.png",
     mechanism:"Organisations get the leadership behaviour the system rewards — not the one it states.",
     symptoms:["Local optimisation despite stated collaboration values","Risk avoidance over transparent escalation","Short-term prioritisation under structural pressure"],
+    keyInsight:"Organisations don't get the leadership behaviour they want. They get the leadership behaviour the system makes rational and rewards.",
+    recommendation:"Audit incentives and operating logic before asking leaders to simply 'behave differently'.",
     causes:[ { to:"cultureSystem", verb:"reinforces" } ]
   },
   operatingArchitecture: {
     name:"AI Operating Architecture", img:"assets/models/operating-architecture.png",
     mechanism:"Same workload, different model paths, different operating economics.",
     symptoms:["Single-model dependency as an operational risk","Unmanaged jurisdiction and access risk","Latency and cost variability across model paths"],
+    keyInsight:"Same workload. Different model paths. Different operational economics. Don't rely on a single model — build architecture that adapts.",
+    recommendation:"Simulate at least one fallback model path before committing to a single primary vendor.",
     causes:[ { to:"operatingCost", verb:"determines" }, { to:"costAmplification", verb:"fuels" }, { to:"operationalCapacity", verb:"constrains" } ]
   },
   capabilityStack: {
     name:"AI Capability Stack Model", img:"assets/models/capability-stack.png",
     mechanism:"AI capability is a stack, not a single tool.",
     symptoms:["Tool fragmentation across teams","Governance blind spots between layers","Uncontrolled scaling without observability"],
+    keyInsight:"AI capability is not a single tool — it is a stack. Real value emerges only when experience, workflows, data, governance and execution work together under an aligned operating model.",
+    recommendation:"Map your current stack layer by layer before adding another point tool.",
     causes:[ { to:"operatingArchitecture", verb:"underpins" }, { to:"operatingCost", verb:"sets the baseline for" } ]
   },
   cultureSystem: {
     name:"Culture System Model", img:"assets/models/culture-system.png",
     mechanism:"Culture emerges from system dynamics, not from values statements.",
     symptoms:["Declared values diverging from rewarded behaviour","Silence replacing escalation","Political navigation replacing open coordination"],
+    keyInsight:"Culture is not created by values alone. It emerges from the interaction of strategy, leadership, incentives, structure and operational reality — reinforced over time.",
+    recommendation:"Look at what the system actually rewards, not what the values statement says, before running another culture initiative.",
     causes:[ { to:"organizationalCoherence", verb:"reinforces" } ]
   },
 };
@@ -359,7 +398,9 @@ function toggleChain(key){
    Derive directed cross-category edges from model-level causal edges
 --------------------------------------------------------- */
 function computeCategoryEdges(){
-  const edgeWeights = {}; // "catA|catB" (alpha-sorted) -> { weight, netFrom, netTo }
+  // "catA|catB" (alpha-sorted) -> { "catA>catB": weight, "catB>catA": weight }
+  // no aggregation into a single "dominant" direction — every real direction is kept
+  const edgeWeights = {};
 
   Object.entries(MODELS).forEach(([mk, m]) => {
     (m.causes || []).forEach(edge => {
@@ -369,18 +410,10 @@ function computeCategoryEdges(){
       if(!catA || !catB || catA === catB) return;
 
       const sortedKey = [catA, catB].sort().join('|');
-      if(!edgeWeights[sortedKey]) edgeWeights[sortedKey] = { weight:0, directions:{} };
-      edgeWeights[sortedKey].weight += 1;
+      if(!edgeWeights[sortedKey]) edgeWeights[sortedKey] = {};
       const dirKey = catA + '>' + catB;
-      edgeWeights[sortedKey].directions[dirKey] = (edgeWeights[sortedKey].directions[dirKey] || 0) + 1;
+      edgeWeights[sortedKey][dirKey] = (edgeWeights[sortedKey][dirKey] || 0) + 1;
     });
-  });
-
-  // resolve a dominant direction per pair (arrow points there if edges are unanimous or majority)
-  Object.values(edgeWeights).forEach(e => {
-    const dirs = Object.entries(e.directions).sort((a,b) => b[1]-a[1]);
-    e.dominant = dirs[0][0]; // "catA>catB"
-    e.unanimous = dirs.length === 1;
   });
 
   return edgeWeights;
@@ -390,8 +423,10 @@ const CATEGORY_EDGES = computeCategoryEdges();
 
 function categoryDegree(catKey){
   let deg = 0;
-  Object.entries(CATEGORY_EDGES).forEach(([pair, e]) => {
-    if(pair.split('|').includes(catKey)) deg += e.weight;
+  Object.values(CATEGORY_EDGES).forEach(dirs => {
+    Object.entries(dirs).forEach(([dirKey, w]) => {
+      if(dirKey.split('>').includes(catKey)) deg += w;
+    });
   });
   return deg;
 }
@@ -434,30 +469,30 @@ function buildMapSVG(){
     spokes += `<line class="link-line" x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}"/>`;
   });
 
-  // cross-category edges, curved, weighted by strength, arrowed by dominant direction
+  // cross-category edges — every real direction gets its own arrow.
+  // when two mechanisms influence each other both ways, that's two separate
+  // curved arrows (bowing opposite ways), not one abstracted "mutual" line.
   let crossLinks = "";
-  Object.entries(CATEGORY_EDGES).forEach(([pairKey, edge]) => {
+  Object.entries(CATEGORY_EDGES).forEach(([pairKey, dirs]) => {
     const [a, b] = pairKey.split('|');
     const p1 = positions[a], p2 = positions[b];
     if(!p1 || !p2) return;
 
-    // orient the drawn curve to match the dominant direction (from -> to)
-    const [fromKey, toKey] = edge.dominant.split('>');
-    const start = positions[fromKey], end = positions[toKey];
+    Object.entries(dirs).forEach(([dirKey, weight]) => {
+      const [fromKey, toKey] = dirKey.split('>');
+      const start = positions[fromKey], end = positions[toKey];
+      const mx = (start.x + end.x) / 2, my = (start.y + end.y) / 2;
+      const dx = end.x - start.x, dy = end.y - start.y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      const sign = (fromKey === a) ? 1 : -1; // opposite curve per direction, so two arrows never overlap
+      const offset = dist * 0.15 * sign;
+      const px = -dy / dist * offset, py = dx / dist * offset;
+      const ctrlX = mx + px, ctrlY = my + py;
+      const strokeW = 1 + weight * 0.9;
+      const opacity = 0.45 + Math.min(weight, 3) * 0.15;
 
-    const mx = (start.x + end.x) / 2, my = (start.y + end.y) / 2;
-    const dx = end.x - start.x, dy = end.y - start.y;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const offset = dist * 0.14;
-    const px = -dy / dist * offset, py = dx / dist * offset;
-    const ctrlX = mx + px, ctrlY = my + py;
-    const strokeW = 1 + edge.weight * 0.9;
-    const opacity = 0.4 + Math.min(edge.weight, 3) * 0.15;
-    const dashArr = edge.unanimous ? '' : 'stroke-dasharray:6,5;';
-    const markerStart = edge.unanimous ? '' : 'marker-start="url(#arrow-start)"';
-
-    // pull the endpoint back slightly so the arrowhead doesn't sit under the node
-    crossLinks += `<path class="cross-link" d="M ${start.x} ${start.y} Q ${ctrlX} ${ctrlY} ${end.x} ${end.y}" style="stroke-width:${strokeW};opacity:${opacity};${dashArr}" marker-end="url(#arrow)" ${markerStart}/>`;
+      crossLinks += `<path class="cross-link" d="M ${start.x} ${start.y} Q ${ctrlX} ${ctrlY} ${end.x} ${end.y}" style="stroke-width:${strokeW};opacity:${opacity};" marker-end="url(#arrow)"/>`;
+    });
   });
 
   // nodes, sized by total cross-category degree
@@ -482,9 +517,6 @@ function buildMapSVG(){
         <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#6CA4AB"/>
         </marker>
-        <marker id="arrow-start" viewBox="0 0 10 10" refX="2" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-          <path d="M 10 0 L 0 5 L 10 10 z" fill="#6CA4AB"/>
-        </marker>
       </defs>
       ${spokes}
       ${crossLinks}
@@ -506,12 +538,12 @@ function renderMap(){
     <div class="hero">
       <div class="hero-eyebrow">AI Operating Model Framework</div>
       <h1>How AI pressure moves through an <strong>organisation</strong></h1>
-      <p>Seven mechanisms. Seventeen models. Click a mechanism to see what's underneath it — and how it connects to the rest.</p>
+      <p>Six mechanisms. Fifteen causally-linked models. Click a mechanism to see what's underneath it — and how it connects to the rest.</p>
     </div>
     <div class="wrap">
       <div class="map-box">${buildMapSVG()}</div>
       <div class="map-hint">Click a mechanism to explore · click the centre for an overview</div>
-      <div class="map-hint" style="margin-top:6px;">— solid line: one-directional pressure &nbsp;·&nbsp; ┄ dashed line: mutual, reinforcing in both directions</div>
+      <div class="map-hint" style="margin-top:6px;">Every arrow is a real, direct influence — thicker = more underlying model links. Where two mechanisms influence each other both ways, you'll see two separate arrows.</div>
       <div class="browse-row"><span class="browse-link" onclick="showAll()">Browse all 17 models →</span></div>
       <div class="center-overview ${centerOpen ? 'open' : ''}" id="center-overview">
         <h3>${META_OVERVIEW.title}</h3>
@@ -598,6 +630,10 @@ function renderModelCard(key){
       <ul class="symptom-list">
         ${m.symptoms.map(s => `<li>${s}</li>`).join('')}
       </ul>
+      <div class="key-insight">
+        <div class="ki-mark">"</div>
+        <div class="ki-text">${m.keyInsight}</div>
+      </div>
       ${outgoing.length ? `
         <div class="connected-label">Drives →</div>
         <div class="chip-row">${chipsOut}</div>
@@ -606,6 +642,10 @@ function renderModelCard(key){
         <div class="connected-label" style="margin-top:10px;">← Driven by</div>
         <div class="chip-row">${chipsIn}</div>
       ` : ''}
+      <div class="recommendation">
+        <div class="rec-label">Recommended focus</div>
+        <div class="rec-text">${m.recommendation}</div>
+      </div>
       ${outgoing.length ? `
         <button class="trace-btn" onclick="toggleChain('${key}')">Trace the chain →</button>
         <div class="chain-panel" id="chain-${key}"></div>
