@@ -525,12 +525,17 @@ function buildMapSVG(){
   // arrows pointing inward, lighter than the real causal cross-links so the
   // two kinds of connection stay visually distinct: cross-links are computed
   // causality between mechanisms, these are "read through this lens."
+  // Drawn only in the inner half of the radius — starting near a node and
+  // running all the way in would put two neighbouring mechanisms' spokes
+  // right next to each other out near the ring, reading as a false direct
+  // line between them. Staying inner-only avoids that.
   let spokes = "";
   keys.forEach(k => {
     const p = positions[k];
     const dx = cx - p.x, dy = cy - p.y;
     const dist = Math.sqrt(dx*dx + dy*dy);
-    const startGap = (40 + Math.min(categoryDegree(k), 6) * 2.6) + 3;
+    const nodeR = 40 + Math.min(categoryDegree(k), 6) * 2.6;
+    const startGap = Math.max(nodeR + 3, dist * 0.52);
     const endGap = centerR + 3;
     const startX = p.x + (dx/dist) * startGap;
     const startY = p.y + (dy/dist) * startGap;
@@ -542,8 +547,37 @@ function buildMapSVG(){
   // cross-category edges — every real direction gets its own arrow.
   // when two mechanisms influence each other both ways, that's two separate
   // curved arrows (bowing opposite ways), not one abstracted "mutual" line.
-  // control points are pushed outward, away from the centre, so long chords
-  // bow around the hub instead of sweeping close to (or through) it.
+  // For each edge, several bow amounts and both curve sides are tried, and
+  // whichever gives the best worst-case clearance against the centre AND
+  // every other mechanism node is used — a chord between two nodes that
+  // happen to have a third node roughly between them (e.g. Leadership to
+  // Culture, with Architecture sitting between them on the ring) needs a
+  // different fix than one that merely needs to clear the centre.
+  function nodeRadiusOf(k){ return 40 + Math.min(categoryDegree(k), 6) * 2.6; }
+
+  function curveWorstClearance(x1,y1,ctrlX,ctrlY,x2,y2, excludeKeys){
+    let worst = Infinity;
+    keys.forEach(k => {
+      if(excludeKeys.includes(k)) return;
+      const p = positions[k], r = nodeRadiusOf(k);
+      for(let i=0;i<=40;i++){
+        const t=i/40;
+        const bx=(1-t)**2*x1+2*(1-t)*t*ctrlX+t**2*x2;
+        const by=(1-t)**2*y1+2*(1-t)*t*ctrlY+t**2*y2;
+        const d=Math.sqrt((bx-p.x)**2+(by-p.y)**2) - r;
+        if(d<worst) worst=d;
+      }
+    });
+    for(let i=0;i<=40;i++){
+      const t=i/40;
+      const bx=(1-t)**2*x1+2*(1-t)*t*ctrlX+t**2*x2;
+      const by=(1-t)**2*y1+2*(1-t)*t*ctrlY+t**2*y2;
+      const d=Math.sqrt((bx-cx)**2+(by-cy)**2) - centerR;
+      if(d<worst) worst=d;
+    }
+    return worst;
+  }
+
   let crossLinks = "";
   Object.entries(CATEGORY_EDGES).forEach(([pairKey, dirs]) => {
     const [a, b] = pairKey.split('|');
@@ -556,20 +590,17 @@ function buildMapSVG(){
       const mx = (start.x + end.x) / 2, my = (start.y + end.y) / 2;
       const dx = end.x - start.x, dy = end.y - start.y;
       const dist = Math.sqrt(dx*dx + dy*dy);
-      const sign = (fromKey === a) ? 1 : -1; // opposite curve per direction, so two arrows never overlap
-      let offset = dist * 0.32 * sign;
-      let ctrlX = mx + (-dy / dist * offset);
-      let ctrlY = my + (dx / dist * offset);
 
-      // bias the control point away from the centre so the arc clears the hub
-      const cdx = ctrlX - cx, cdy = ctrlY - cy;
-      const cdist = Math.sqrt(cdx*cdx + cdy*cdy);
-      const minClear = R * 1.15;
-      if(cdist < minClear){
-        const scale = minClear / Math.max(cdist, 1);
-        ctrlX = cx + cdx * scale;
-        ctrlY = cy + cdy * scale;
-      }
+      let best = null;
+      [0.22, 0.32, 0.45, 0.6].forEach(mult => {
+        [1, -1].forEach(s => {
+          const offset = dist * mult * s;
+          const cX = mx + (-dy/dist) * offset, cY = my + (dx/dist) * offset;
+          const clr = curveWorstClearance(start.x, start.y, cX, cY, end.x, end.y, [fromKey, toKey]);
+          if(!best || clr > best.clr) best = { cX, cY, clr };
+        });
+      });
+      const ctrlX = best.cX, ctrlY = best.cY;
 
       const strokeW = 1 + weight * 0.9;
       const opacity = 0.5 + Math.min(weight, 3) * 0.13;
@@ -577,8 +608,7 @@ function buildMapSVG(){
       // pull the endpoint back to the target node's edge, along the curve's
       // exact tangent at t=1 (which for a quadratic bezier is end - ctrl) —
       // otherwise the arrowhead lands on the node's centre and gets buried under it
-      const toDeg = categoryDegree(toKey);
-      const toNodeR = 40 + Math.min(toDeg, 6) * 2.6;
+      const toNodeR = nodeRadiusOf(toKey);
       const gap = toNodeR + 3;
       const tdx = end.x - ctrlX, tdy = end.y - ctrlY;
       const tdist = Math.sqrt(tdx*tdx + tdy*tdy);
