@@ -46,12 +46,14 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .map-box{display:flex;justify-content:center;padding:1rem 0 0.5rem}
 .map-svg{width:100%;max-width:640px;height:auto}
 .node-circle{fill:var(--bg3);stroke:var(--border2);stroke-width:1.5;transition:all 0.15s;cursor:pointer}
+.node-circle-inner{fill:none;stroke:var(--accent);stroke-width:0.5;opacity:0.3;pointer-events:none}
 .node-circle:hover{stroke:var(--accent);fill:var(--accent-bg)}
 .node-circle.center{fill:var(--bg2);stroke:var(--accent);stroke-width:2}
 .node-label{fill:var(--text2);font-family:var(--sans);font-size:12.5px;font-weight:500;text-anchor:middle;pointer-events:none}
 .node-label.center-label{fill:var(--text);font-size:11.5px;font-weight:500}
 .node-count{fill:var(--text3);font-family:var(--mono);font-size:9.5px;text-anchor:middle;pointer-events:none}
 .link-line{stroke:var(--border2);stroke-width:1;fill:none;opacity:0.45}
+.spoke-in{stroke:var(--accent);stroke-width:1.3;opacity:0.4;fill:none}
 .cross-link{stroke:var(--accent);fill:none;stroke-linecap:round}
 .node-pulse{fill:none;stroke:var(--accent);stroke-width:1.5;opacity:0.5;animation:pulse 2.6s ease-out infinite}
 @keyframes pulse{
@@ -376,8 +378,8 @@ const ROOT_MODEL = {
     "Capacity increases faster than the organisation can absorb it"
   ],
   keyInsight: "AI pressure does not stay where it starts. It moves through architecture, cost, governance, capacity, coordination, culture and leadership — changing the operating model as it moves.",
-  drivesLabel: "This is the root pressure pattern — it drives every mechanism in the framework, directly or indirectly.",
-  drivenByText: "This is the root pressure pattern. It is not driven by a single mechanism in the framework.",
+  containsLabel: "Every mechanism's pressure is read through this model — it's how the pattern becomes visible and actionable, not another node the pressure simply passes through.",
+  drivenByText: "Nothing in the framework drives the reference model on its own. It's fed by all seven at once — that's exactly what the inward arrows on the map show.",
   diagnosticQuestions: [
     "Where does AI pressure first enter the organisation?",
     "Where does that pressure become visible?",
@@ -511,7 +513,7 @@ function showMap(){
 --------------------------------------------------------- */
 function buildMapSVG(){
   const keys = Object.keys(CATEGORIES);
-  const cx = 320, cy = 300, R = 210, centerR = 58;
+  const cx = 320, cy = 300, R = 215, centerR = 62;
   const positions = {};
 
   keys.forEach((k, i) => {
@@ -519,16 +521,29 @@ function buildMapSVG(){
     positions[k] = { x: cx + R * Math.cos(angle), y: cy + R * Math.sin(angle) };
   });
 
-  // spoke lines (center -> each node), drawn faint so the cross-links stand out
+  // every mechanism's pressure resolves into the reference model — seven
+  // arrows pointing inward, lighter than the real causal cross-links so the
+  // two kinds of connection stay visually distinct: cross-links are computed
+  // causality between mechanisms, these are "read through this lens."
   let spokes = "";
   keys.forEach(k => {
     const p = positions[k];
-    spokes += `<line class="link-line" x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}"/>`;
+    const dx = cx - p.x, dy = cy - p.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const startGap = (40 + Math.min(categoryDegree(k), 6) * 2.6) + 3;
+    const endGap = centerR + 3;
+    const startX = p.x + (dx/dist) * startGap;
+    const startY = p.y + (dy/dist) * startGap;
+    const endX = cx - (dx/dist) * endGap;
+    const endY = cy - (dy/dist) * endGap;
+    spokes += `<line class="spoke-in" x1="${startX}" y1="${startY}" x2="${endX}" y2="${endY}" marker-end="url(#arrowSoft)"/>`;
   });
 
   // cross-category edges — every real direction gets its own arrow.
   // when two mechanisms influence each other both ways, that's two separate
   // curved arrows (bowing opposite ways), not one abstracted "mutual" line.
+  // control points are pushed outward, away from the centre, so long chords
+  // bow around the hub instead of sweeping close to (or through) it.
   let crossLinks = "";
   Object.entries(CATEGORY_EDGES).forEach(([pairKey, dirs]) => {
     const [a, b] = pairKey.split('|');
@@ -542,17 +557,28 @@ function buildMapSVG(){
       const dx = end.x - start.x, dy = end.y - start.y;
       const dist = Math.sqrt(dx*dx + dy*dy);
       const sign = (fromKey === a) ? 1 : -1; // opposite curve per direction, so two arrows never overlap
-      const offset = dist * 0.15 * sign;
-      const px = -dy / dist * offset, py = dx / dist * offset;
-      const ctrlX = mx + px, ctrlY = my + py;
+      let offset = dist * 0.32 * sign;
+      let ctrlX = mx + (-dy / dist * offset);
+      let ctrlY = my + (dx / dist * offset);
+
+      // bias the control point away from the centre so the arc clears the hub
+      const cdx = ctrlX - cx, cdy = ctrlY - cy;
+      const cdist = Math.sqrt(cdx*cdx + cdy*cdy);
+      const minClear = R * 1.15;
+      if(cdist < minClear){
+        const scale = minClear / Math.max(cdist, 1);
+        ctrlX = cx + cdx * scale;
+        ctrlY = cy + cdy * scale;
+      }
+
       const strokeW = 1 + weight * 0.9;
-      const opacity = 0.45 + Math.min(weight, 3) * 0.15;
+      const opacity = 0.5 + Math.min(weight, 3) * 0.13;
 
       // pull the endpoint back to the target node's edge, along the curve's
       // exact tangent at t=1 (which for a quadratic bezier is end - ctrl) —
       // otherwise the arrowhead lands on the node's centre and gets buried under it
       const toDeg = categoryDegree(toKey);
-      const toNodeR = 38 + Math.min(toDeg, 6) * 2.4;
+      const toNodeR = 40 + Math.min(toDeg, 6) * 2.6;
       const gap = toNodeR + 3;
       const tdx = end.x - ctrlX, tdy = end.y - ctrlY;
       const tdist = Math.sqrt(tdx*tdx + tdy*tdy);
@@ -569,10 +595,11 @@ function buildMapSVG(){
     const p = positions[k];
     const cat = CATEGORIES[k];
     const deg = categoryDegree(k);
-    const nodeR = 38 + Math.min(deg, 6) * 2.4;
+    const nodeR = 40 + Math.min(deg, 6) * 2.6;
     nodes += `
       <g onclick="showCategory('${k}')" style="cursor:pointer;">
-        <circle class="node-circle" cx="${p.x}" cy="${p.y}" r="${nodeR}"/>
+        <circle class="node-circle" cx="${p.x}" cy="${p.y}" r="${nodeR}" filter="url(#nodeShadow)"/>
+        <circle class="node-circle-inner" cx="${p.x}" cy="${p.y}" r="${nodeR-4}"/>
         <text class="node-label" x="${p.x}" y="${p.y-2}">${cat.label}</text>
         <text class="node-count" x="${p.x}" y="${p.y+14}">${cat.models.length + (cat.tool?1:0)} model${cat.models.length>1?'s':''}</text>
       </g>
@@ -585,13 +612,20 @@ function buildMapSVG(){
         <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M 0 0 L 10 5 L 0 10 z" fill="#6CA4AB"/>
         </marker>
+        <marker id="arrowSoft" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="#6CA4AB" opacity="0.5"/>
+        </marker>
+        <filter id="nodeShadow" x="-50%" y="-50%" width="200%" height="200%">
+          <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000000" flood-opacity="0.35"/>
+        </filter>
       </defs>
       ${spokes}
       ${crossLinks}
       ${nodes}
       <g onclick="showRoot()" style="cursor:pointer;">
         <circle class="node-pulse" cx="${cx}" cy="${cy}" r="${centerR}"/>
-        <circle class="node-circle center" cx="${cx}" cy="${cy}" r="${centerR}"/>
+        <circle class="node-circle center" cx="${cx}" cy="${cy}" r="${centerR}" filter="url(#nodeShadow)"/>
+        <circle class="node-circle-inner" cx="${cx}" cy="${cy}" r="${centerR-4}"/>
         <text class="node-label center-label" x="${cx}" y="${cy-14}" style="font-size:10.5px;">AI Operating</text>
         <text class="node-label center-label" x="${cx}" y="${cy}" style="font-size:10.5px;">Reference</text>
         <text class="node-label center-label" x="${cx}" y="${cy+14}" style="font-size:10.5px;">Model</text>
@@ -624,9 +658,9 @@ function showRoot(){
   view = "root";
   setActiveNav();
   const r = ROOT_MODEL;
-  const mechChips = Object.entries(CATEGORIES).map(([k,c]) =>
-    `<div class="chip" onclick="showCategory('${k}')">${c.label}</div>`
-  ).join('');
+  const allChips = Object.entries(CATEGORIES)
+    .map(([k,c]) => `<div class="chip" onclick="showCategory('${k}')">${c.label}</div>`)
+    .join('');
 
   app.innerHTML = `
     <div class="wrap">
@@ -655,9 +689,9 @@ function showRoot(){
           <div class="ki-text">${r.keyInsight}</div>
         </div>
 
-        <div class="connected-label">Drives →</div>
-        <div class="chip-row">${mechChips}</div>
-        <div style="font-size:12px;color:var(--text3);margin-top:6px;font-style:italic;">${r.drivesLabel}</div>
+        <div class="connected-label">Resolves pressure from (all seven) →</div>
+        <div class="chip-row">${allChips}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:6px;font-style:italic;">${r.containsLabel}</div>
 
         <div class="connected-label" style="margin-top:14px;">← Driven by</div>
         <div style="font-size:13px;color:var(--text3);font-style:italic;margin-top:4px;">${r.drivenByText}</div>
