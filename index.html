@@ -170,13 +170,13 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex
    DATA
 --------------------------------------------------------- */
 const CATEGORIES = {
-  coordination: { label:"Coordination", desc:"How decisions, ownership and execution stay aligned as AI activity scales.", models:["coordinationStrain","organizationalCoherence"] },
-  governance: { label:"Governance", desc:"Who decides, who's accountable, and where AI-shaped logic hides from view.", models:["executiveGovernance","shadowLogic"] },
-  cost: { label:"Cost", desc:"How operating economics shift as AI moves from assistive to agentic use.", models:["operatingCost","costAmplification"], tool:"costSimulator" },
-  capacity: { label:"Capacity", desc:"Why AI-generated capacity doesn't automatically convert into realised value.", models:["absorptionGap","operationalCapacity"] },
-  leadership: { label:"Leadership", desc:"How leadership bandwidth and governance tempo keep pace — or fall behind — AI execution speed.", models:["leadershipWindow","interimLeadership"] },
-  architecture: { label:"Architecture", desc:"How the technical stack and operating architecture shape cost, risk and resilience.", models:["operatingArchitecture","capabilityStack"] },
-  culture: { label:"Culture", desc:"How culture and rewarded behaviour emerge from system dynamics, not from values statements — and reinforce or undermine coordination in turn.", models:["cultureSystem","leadershipBehaviour"] },
+  coordination: { label:"Coordination", type:"Structural Mechanism", desc:"How execution stays synchronised across functions as AI activity scales.", models:["coordinationStrain","organizationalCoherence"] },
+  governance: { label:"Governance", type:"Decision Mechanism", desc:"Who decides, who is accountable, and where AI-shaped logic hides from view.", models:["executiveGovernance","shadowLogic"] },
+  cost: { label:"Cost", type:"Economic Mechanism", desc:"How operating economics shift as AI moves from assistive to agentic use.", models:["operatingCost","costAmplification"], tool:"costSimulator" },
+  capacity: { label:"Capacity", type:"Operational Mechanism", desc:"Why AI-generated capacity does not automatically convert into realised value.", models:["absorptionGap","operationalCapacity"] },
+  leadership: { label:"Leadership", type:"Bandwidth Mechanism", desc:"How leadership bandwidth and governance tempo keep pace — or fall behind — AI execution speed.", models:["leadershipWindow","interimLeadership"] },
+  architecture: { label:"Architecture", type:"Technical Mechanism", desc:"How the technical stack and operating architecture shape cost, risk and resilience.", models:["operatingArchitecture","capabilityStack"] },
+  culture: { label:"Culture", type:"Emergent Mechanism", desc:"How culture and rewarded behaviour emerge from system dynamics, not from values statements.", models:["cultureSystem","leadershipBehaviour"] },
 };
 
 // Each model lists only its OUTGOING causal edges: what it drives, and how.
@@ -626,7 +626,7 @@ function showCategory(key, highlightModel){
   app.innerHTML = `
     <div class="wrap">
       <div class="cat-head">
-        <div class="cat-eyebrow">Mechanism</div>
+        <div class="cat-eyebrow">${cat.type}</div>
         <div class="cat-title">${cat.label}</div>
         <div class="cat-desc">${cat.desc}</div>
       </div>
