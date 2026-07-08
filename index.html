@@ -38,6 +38,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .hero h1{font-size:clamp(22px,3.6vw,34px);font-weight:300;letter-spacing:-0.03em;margin-bottom:0.5rem;line-height:1.2}
 .hero h1 strong{font-weight:500;color:#fff}
 .hero p{font-size:14.5px;color:var(--text2);max-width:620px;margin:0 auto}
+.hero p + p{margin-top:10px}
 
 .wrap{max-width:1000px;margin:0 auto;padding:1.5rem 2rem 4rem}
 
@@ -69,12 +70,6 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .all-row .ar-causal{font-family:var(--mono);font-size:11px;color:var(--text3);flex:none;white-space:nowrap}
 .all-row .ar-cat{font-family:var(--mono);font-size:11px;color:var(--accent2);background:var(--accent-bg);padding:3px 9px;border-radius:20px;flex:none}
 .all-row .ar-cat.ar-special{color:var(--green);background:rgba(45,212,160,0.12);border:1px solid rgba(45,212,160,0.3)}
-
-.center-overview{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem 1.5rem;margin-top:1rem;display:none}
-.center-overview.open{display:block}
-.center-overview h3{font-size:15px;font-weight:500;color:var(--text);margin-bottom:8px}
-.center-overview p{font-size:13.5px;color:var(--text2);line-height:1.6;margin-bottom:12px}
-.center-overview .thumb-link{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:12.5px;color:var(--accent2);cursor:pointer;text-decoration:none}
 
 /* category view */
 .cat-head{margin-bottom:1.25rem}
@@ -178,7 +173,7 @@ const CATEGORIES = {
   coordination: { label:"Coordination", desc:"How decisions, ownership and execution stay aligned as AI activity scales.", models:["coordinationStrain","organizationalCoherence"] },
   governance: { label:"Governance", desc:"Who decides, who's accountable, and where AI-shaped logic hides from view.", models:["executiveGovernance","shadowLogic"] },
   cost: { label:"Cost", desc:"How operating economics shift as AI moves from assistive to agentic use.", models:["operatingCost","costAmplification"], tool:"costSimulator" },
-  capacity: { label:"Capacity", desc:"Why AI-generated capacity doesn't automatically convert into realised value.", models:["absorptionGap","operationalCapacity","workshopModel"] },
+  capacity: { label:"Capacity", desc:"Why AI-generated capacity doesn't automatically convert into realised value.", models:["absorptionGap","operationalCapacity"] },
   leadership: { label:"Leadership", desc:"How leadership bandwidth and governance tempo keep pace — or fall behind — AI execution speed.", models:["leadershipWindow","interimLeadership"] },
   architecture: { label:"Architecture", desc:"How the technical stack and operating architecture shape cost, risk and resilience.", models:["operatingArchitecture","capabilityStack"] },
   culture: { label:"Culture", desc:"How culture and rewarded behaviour emerge from system dynamics, not from values statements — and reinforce or undermine coordination in turn.", models:["cultureSystem","leadershipBehaviour"] },
@@ -241,7 +236,7 @@ const MODELS = {
     symptoms:["Rising activity without proportional value","Decision bottlenecks despite more capacity","Fragmented ownership of AI-generated output","Strategic noise with no decision attached"],
     keyInsight:"AI does not automatically create value. AI creates capacity. Value emerges only when the organisation can absorb, govern, prioritise and operationalise the consequences of that capacity.",
     recommendation:"Measure the gap between capacity generated and capacity absorbed — that gap is the actual leadership problem.",
-    causes:[ { to:"coordinationStrain", verb:"floods" }, { to:"workshopModel", verb:"requires" }, { to:"costAmplification", verb:"wastes" } ]
+    causes:[ { to:"coordinationStrain", verb:"floods" }, { to:"costAmplification", verb:"wastes" } ]
   },
   operationalCapacity: {
     name:"AI Operational Capacity Model", img:"assets/models/operational-capacity.png",
@@ -250,14 +245,6 @@ const MODELS = {
     keyInsight:"AI does not only improve efficiency. It changes the operational capacity ceiling of the organisation.",
     recommendation:"Redesign workflows for parallel, adaptive execution rather than scaling the old linear process.",
     causes:[ { to:"absorptionGap", verb:"widens" } ]
-  },
-  workshopModel: {
-    name:"AI Absorption Gap Workshop Model", img:"assets/models/absorption-gap-workshop.png",
-    mechanism:"Closing the absorption gap is a structured process, not a one-off initiative.",
-    symptoms:["Repeated pilots that never convert to scale","No clear path from capacity to realised value","Leakage between capacity, governance and outcome"],
-    keyInsight:"AI does not automatically create value. AI creates capacity. Value emerges only when the organisation can absorb, govern, prioritise and operationalise the consequences of that capacity.",
-    recommendation:"Run the three-layer assessment — capacity, absorption, realised value — before committing to a new AI initiative.",
-    causes:[]
   },
   leadershipWindow: {
     name:"AI Leadership Window Model", img:"assets/models/leadership-window.png",
@@ -273,7 +260,7 @@ const MODELS = {
     symptoms:["Governance capacity fixed while transition tempo increases","No temporary structure to absorb the gap between old and new operating model","Redesign and delivery competing for the same decision bandwidth"],
     keyInsight:"AI increases transition pressure faster than most organisations can redesign leadership capacity around it. Interim leadership is the mechanism that makes transformation possible without stopping the business.",
     recommendation:"Add transitional operating capacity — governance bandwidth scoped to the redesign period — rather than stretching the existing structure to cover both running and rebuilding the business.",
-    causes:[ { to:"workshopModel", verb:"enables" } ]
+    causes:[]
   },
   leadershipBehaviour: {
     name:"Leadership Behaviour System Model", img:"assets/models/leadership-behaviour.png",
@@ -320,11 +307,21 @@ const TOOLS = {
   }
 };
 
-const META_OVERVIEW = {
-  title: "AI Operating Model Framework",
-  text: "This map shows how AI-driven pressure moves through an organisation — across coordination, governance, cost, capacity, leadership, architecture and culture. The mechanisms aren't independent. Pressure in one drives strain in another, in a specific direction.",
-  keyInsight:"AI value is created at the intersection of capability, architecture, governance and organisational readiness — not by model pricing alone.",
-  img: "assets/models/meta-framework.png"
+const ROOT_MODEL = {
+  title: "AI Operating Reference Model",
+  img: "assets/models/meta-framework.png",
+  mechanism: "AI does not create one organisational problem. It creates pressure that moves through the operating model.",
+  symptoms: [
+    "AI initiatives start in one area but create strain in another",
+    "Cost, governance and coordination issues begin to reinforce each other",
+    "Decision ownership becomes less clear as workflows become more automated",
+    "Architecture choices start shaping operating economics and leadership load",
+    "Capacity increases faster than the organisation can absorb it"
+  ],
+  keyInsight: "AI pressure does not stay where it starts. It moves through architecture, cost, governance, capacity, coordination, culture and leadership — changing the operating model as it moves.",
+  drivesLabel: "This is the root pressure pattern — it drives every mechanism in the framework, directly or indirectly.",
+  drivenByText: "This is the root pressure pattern. It is not driven by a single mechanism in the framework.",
+  recommendation: "Before scaling AI further, identify where pressure is entering the operating model — and where it is actually showing up."
 };
 
 // find which category a model belongs to
@@ -433,8 +430,7 @@ function categoryDegree(catKey){
 /* ---------------------------------------------------------
    STATE
 --------------------------------------------------------- */
-let view = "map"; // map | category
-let centerOpen = false;
+let view = "map"; // map | category | root | all
 
 const app = document.getElementById('app');
 
@@ -444,7 +440,6 @@ function setActiveNav(){
 
 function showMap(){
   view = "map";
-  centerOpen = false;
   renderMap();
 }
 
@@ -531,11 +526,12 @@ function buildMapSVG(){
       ${spokes}
       ${crossLinks}
       ${nodes}
-      <g onclick="toggleCenter()" style="cursor:pointer;">
+      <g onclick="showRoot()" style="cursor:pointer;">
         <circle class="node-pulse" cx="${cx}" cy="${cy}" r="${centerR}"/>
         <circle class="node-circle center" cx="${cx}" cy="${cy}" r="${centerR}"/>
-        <text class="node-label center-label" x="${cx}" y="${cy-6}">AI Operational</text>
-        <text class="node-label center-label" x="${cx}" y="${cy+10}">Pressure</text>
+        <text class="node-label center-label" x="${cx}" y="${cy-14}" style="font-size:10.5px;">AI Operating</text>
+        <text class="node-label center-label" x="${cx}" y="${cy}" style="font-size:10.5px;">Reference</text>
+        <text class="node-label center-label" x="${cx}" y="${cy+14}" style="font-size:10.5px;">Model</text>
       </g>
     </svg>
   `;
@@ -547,29 +543,73 @@ function renderMap(){
   app.innerHTML = `
     <div class="hero">
       <div class="hero-eyebrow">AI Operating Model Framework</div>
-      <h1>How AI pressure moves through an <strong>organisation</strong></h1>
-      <p>AI rarely creates an isolated problem. Pressure in one part of the operating model spreads into the next — architecture drives cost, cost forces governance scrutiny, governance produces coordination strain, coordination strain reshapes leadership capacity. This framework maps the mechanisms underneath that movement.</p>
+      <h1>A <strong>reference model</strong> for how AI pressure moves through an organisation</h1>
+      <p>AI rarely creates an isolated problem. Pressure in one part of the operating model spreads into the next: architecture drives cost, cost forces governance scrutiny, governance produces coordination strain, and coordination strain reshapes leadership capacity.</p>
+      <p>This reference model maps that movement.</p>
     </div>
     <div class="wrap">
       <div class="map-box">${buildMapSVG()}</div>
       <div class="map-hint">Line thickness = connection strength · two arrows = mutual influence</div>
-      <div class="center-overview ${centerOpen ? 'open' : ''}" id="center-overview">
-        <h3>${META_OVERVIEW.title}</h3>
-        <p>${META_OVERVIEW.text}</p>
-        <div class="key-insight" style="margin:0 0 12px;">
-          <div class="ki-mark">"</div>
-          <div class="ki-text">${META_OVERVIEW.keyInsight}</div>
-        </div>
-        <a class="thumb-link" onclick="openLightbox('${META_OVERVIEW.img}','${META_OVERVIEW.title}')">🔍 View the full framework poster</a>
-      </div>
     </div>
   `;
 }
 
-function toggleCenter(){
-  centerOpen = !centerOpen;
-  const el = document.getElementById('center-overview');
-  if(el) el.className = "center-overview" + (centerOpen ? " open" : "");
+/* ---------------------------------------------------------
+   ROOT MODEL VIEW — the centre node's own page
+--------------------------------------------------------- */
+function showRoot(){
+  view = "root";
+  setActiveNav();
+  const r = ROOT_MODEL;
+  const mechChips = Object.entries(CATEGORIES).map(([k,c]) =>
+    `<div class="chip" onclick="showCategory('${k}')">${c.label}</div>`
+  ).join('');
+
+  app.innerHTML = `
+    <div class="wrap">
+      <div class="cat-head">
+        <div class="cat-eyebrow">Root Model</div>
+        <div class="cat-title">${r.title}</div>
+      </div>
+      <div class="model-card">
+        <div class="model-card-top">
+          <div class="model-thumb" onclick="openLightbox('${r.img}','${r.title}')" style="width:140px;height:105px;">
+            <img src="${r.img}" alt="${r.title}">
+          </div>
+          <div class="model-head">
+            <h4>${r.title}</h4>
+            <div class="mechanism">${r.mechanism}</div>
+          </div>
+        </div>
+
+        <div class="symptoms-label">Common signals</div>
+        <ul class="symptom-list">
+          ${r.symptoms.map(s => `<li>${s}</li>`).join('')}
+        </ul>
+
+        <div class="key-insight">
+          <div class="ki-mark">"</div>
+          <div class="ki-text">${r.keyInsight}</div>
+        </div>
+
+        <div class="connected-label">Drives →</div>
+        <div class="chip-row">${mechChips}</div>
+        <div style="font-size:12px;color:var(--text3);margin-top:6px;font-style:italic;">${r.drivesLabel}</div>
+
+        <div class="connected-label" style="margin-top:14px;">← Driven by</div>
+        <div style="font-size:13px;color:var(--text3);font-style:italic;margin-top:4px;">${r.drivenByText}</div>
+
+        <div class="recommendation">
+          <div class="rec-label">Recommended focus</div>
+          <div class="rec-text">${r.recommendation}</div>
+        </div>
+      </div>
+
+      <div class="back-row">
+        <button class="action-btn" onclick="showMap()">← Back to the map</button>
+      </div>
+    </div>
+  `;
 }
 
 /* ---------------------------------------------------------
@@ -748,7 +788,7 @@ function openLightbox(src, alt){
 function closeLightbox(e){ if(e) e.stopPropagation(); document.getElementById('lightbox').classList.remove('open'); }
 document.addEventListener('keydown', (e) => { if(e.key==='Escape') closeLightbox(); });
 
-window.showMap=showMap; window.showCategory=showCategory; window.toggleCenter=toggleCenter; window.showAll=showAll;
+window.showMap=showMap; window.showCategory=showCategory; window.showRoot=showRoot; window.showAll=showAll;
 window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.toggleChain=toggleChain;
 
 renderMap();
