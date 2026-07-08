@@ -378,7 +378,13 @@ const ROOT_MODEL = {
   keyInsight: "AI pressure does not stay where it starts. It moves through architecture, cost, governance, capacity, coordination, culture and leadership — changing the operating model as it moves.",
   drivesLabel: "This is the root pressure pattern — it drives every mechanism in the framework, directly or indirectly.",
   drivenByText: "This is the root pressure pattern. It is not driven by a single mechanism in the framework.",
-  recommendation: "Before scaling AI further, identify where pressure is entering the operating model — and where it is actually showing up."
+  diagnosticQuestions: [
+    "Where does AI pressure first enter the organisation?",
+    "Where does that pressure become visible?",
+    "Which mechanism is currently under the greatest strain?",
+    "Which mechanism is creating the strongest downstream effects?",
+    "Which part of the operating model is least prepared for further AI scaling?"
+  ]
 };
 
 // find which category a model belongs to
@@ -656,9 +662,11 @@ function showRoot(){
         <div class="connected-label" style="margin-top:14px;">← Driven by</div>
         <div style="font-size:13px;color:var(--text3);font-style:italic;margin-top:4px;">${r.drivenByText}</div>
 
-        <div class="recommendation">
-          <div class="rec-label">Recommended focus</div>
-          <div class="rec-text">${r.recommendation}</div>
+        <div class="exec-questions" style="margin-top:14px;">
+          <div class="rec-label">Diagnostic questions</div>
+          <ul class="exec-list">
+            ${r.diagnosticQuestions.map(q => `<li>${q}</li>`).join('')}
+          </ul>
         </div>
       </div>
 
