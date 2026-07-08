@@ -534,7 +534,7 @@ function buildMapSVG(){
     const p = positions[k];
     const dx = cx - p.x, dy = cy - p.y;
     const dist = Math.sqrt(dx*dx + dy*dy);
-    const nodeR = 40 + Math.min(categoryDegree(k), 6) * 2.6;
+    const nodeR = 48; // uniform on purpose — size no longer implies importance
     const startGap = Math.max(nodeR + 3, dist * 0.52);
     const endGap = centerR + 3;
     const startX = p.x + (dx/dist) * startGap;
@@ -553,7 +553,7 @@ function buildMapSVG(){
   // happen to have a third node roughly between them (e.g. Leadership to
   // Culture, with Architecture sitting between them on the ring) needs a
   // different fix than one that merely needs to clear the centre.
-  function nodeRadiusOf(k){ return 40 + Math.min(categoryDegree(k), 6) * 2.6; }
+  function nodeRadiusOf(k){ return 48; } // uniform — see note above
 
   function curveWorstClearance(x1,y1,ctrlX,ctrlY,x2,y2, excludeKeys){
     let worst = Infinity;
@@ -619,13 +619,15 @@ function buildMapSVG(){
     });
   });
 
-  // nodes, sized by total cross-category degree
+  // nodes — same size for all seven on purpose. Degree is real (see the
+  // model cards and Trace the chain for that), but sizing the node by it
+  // reads as "this mechanism matters less" before anyone clicks anything,
+  // which isn't true — it just has fewer causal edges modelled so far.
   let nodes = "";
   keys.forEach(k => {
     const p = positions[k];
     const cat = CATEGORIES[k];
-    const deg = categoryDegree(k);
-    const nodeR = 40 + Math.min(deg, 6) * 2.6;
+    const nodeR = 48;
     nodes += `
       <g onclick="showCategory('${k}')" style="cursor:pointer;">
         <circle class="node-circle" cx="${p.x}" cy="${p.y}" r="${nodeR}" filter="url(#nodeShadow)"/>
