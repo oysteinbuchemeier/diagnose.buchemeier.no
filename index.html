@@ -367,7 +367,7 @@ const EXEC_QUESTIONS = {
 };
 
 const ROOT_MODEL = {
-  title: "AI Operating Reference Model",
+  title: "AI Operating Reference System",
   img: "assets/models/meta-framework.png",
   mechanism: "AI does not create one organisational problem. It creates pressure that moves through the operating model.",
   symptoms: [
@@ -379,7 +379,7 @@ const ROOT_MODEL = {
   ],
   keyInsight: "AI pressure does not stay where it starts. It moves through architecture, cost, governance, capacity, coordination, culture and leadership — changing the operating model as it moves.",
   containsLabel: "Every mechanism's pressure is read through this model — it's how the pattern becomes visible and actionable, not another node the pressure simply passes through.",
-  drivenByText: "Nothing in the framework drives the reference model on its own. It's fed by all seven at once — that's exactly what the inward arrows on the map show.",
+  drivenByText: "Nothing in the framework drives the reference system on its own. It's fed by all seven at once — that's exactly what the inward arrows on the map show.",
   diagnosticQuestions: [
     "Where does AI pressure first enter the organisation?",
     "Where does that pressure become visible?",
@@ -521,7 +521,7 @@ function buildMapSVG(){
     positions[k] = { x: cx + R * Math.cos(angle), y: cy + R * Math.sin(angle) };
   });
 
-  // every mechanism's pressure resolves into the reference model — seven
+  // every mechanism's pressure resolves into the reference system — seven
   // arrows pointing inward, lighter than the real causal cross-links so the
   // two kinds of connection stay visually distinct: cross-links are computed
   // causality between mechanisms, these are "read through this lens."
@@ -660,7 +660,7 @@ function buildMapSVG(){
         <circle class="node-circle-inner" cx="${cx}" cy="${cy}" r="${centerR-4}"/>
         <text class="node-label center-label" x="${cx}" y="${cy-14}" style="font-size:10.5px;">AI Operating</text>
         <text class="node-label center-label" x="${cx}" y="${cy}" style="font-size:10.5px;">Reference</text>
-        <text class="node-label center-label" x="${cx}" y="${cy+14}" style="font-size:10.5px;">Model</text>
+        <text class="node-label center-label" x="${cx}" y="${cy+14}" style="font-size:10.5px;">System</text>
       </g>
     </svg>
   `;
@@ -672,9 +672,9 @@ function renderMap(){
   app.innerHTML = `
     <div class="hero">
       <div class="hero-eyebrow">AI Operating Model Framework</div>
-      <h1>A <strong>reference model</strong> for how AI pressure moves through an organisation</h1>
+      <h1>A <strong>reference system</strong> for how AI pressure moves through an organisation</h1>
       <p>AI rarely creates an isolated problem. Pressure in one part of the operating model spreads into the next: architecture drives cost, cost forces governance scrutiny, governance produces coordination strain, and coordination strain reshapes leadership capacity.</p>
-      <p>This reference model maps that movement.</p>
+      <p>This reference system maps that movement.</p>
     </div>
     <div class="wrap">
       <div class="map-box">${buildMapSVG()}</div>
@@ -697,7 +697,7 @@ function showRoot(){
   app.innerHTML = `
     <div class="wrap">
       <div class="cat-head">
-        <div class="cat-eyebrow">Root Model</div>
+        <div class="cat-eyebrow">Root System</div>
         <div class="cat-title">${r.title}</div>
       </div>
       <div class="model-card">
