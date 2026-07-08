@@ -95,7 +95,12 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .key-insight .ki-text{font-size:13.5px;color:var(--text);line-height:1.55;font-style:italic}
 
 .recommendation{margin-top:14px;padding:12px 14px;background:rgba(45,212,160,0.07);border:1px solid rgba(45,212,160,0.22);border-radius:8px}
-.recommendation .rec-label{font-family:var(--mono);font-size:10.5px;color:var(--green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
+.exec-questions{margin-top:8px;padding:20px 24px;background:rgba(45,212,160,0.07);border:1px solid rgba(45,212,160,0.22);border-radius:var(--radius-lg)}
+.exec-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.exec-list li{font-size:14px;color:var(--text);line-height:1.5;padding-left:20px;position:relative}
+.exec-list li::before{content:'?';position:absolute;left:0;color:var(--green);font-family:var(--mono);font-weight:700}
+.exec-questions .rec-label{font-size:12px;}
+.recommendation .rec-label, .exec-questions .rec-label{font-family:var(--mono);font-size:10.5px;color:var(--green);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:5px}
 .recommendation .rec-text{font-size:13px;color:var(--text2);line-height:1.5}
 
 .connected-label{font-family:var(--mono);font-size:10.5px;color:var(--text3);letter-spacing:0.06em;text-transform:uppercase;margin:4px 0 6px}
@@ -305,6 +310,58 @@ const TOOLS = {
     cta:"Open the simulator",
     img:"assets/models/cost-simulator.png"
   }
+};
+
+const EXEC_QUESTIONS = {
+  coordination: [
+    "Where are AI-driven decisions waiting instead of flowing?",
+    "Which workflows now depend on cross-functional ownership?",
+    "Where is manual coordination increasing instead of decreasing?",
+    "Which dependencies have become critical as AI activity scales?",
+    "What coordination would fail if one key person disappeared?"
+  ],
+  governance: [
+    "Who owns AI decisions that span multiple functions?",
+    "Where is AI changing decision logic without governance noticing?",
+    "Which decisions no longer fit the current governance model?",
+    "Where is accountability shared but ownership absent?",
+    "What AI decisions cannot currently be audited?"
+  ],
+  cost: [
+    "Do we know the cost per workflow, not just per model?",
+    "What is driving AI cost today: model choice or architecture?",
+    "Which workflows have the fastest cost growth?",
+    "Where are retries, orchestration and context multiplying spend?",
+    "Which AI use cases consume the most budget relative to the value they create?"
+  ],
+  capacity: [
+    "Where is AI creating capacity that the organisation cannot absorb?",
+    "Which decisions have become bottlenecks despite increased AI capability?",
+    "Where is activity increasing without measurable business value?",
+    "Which operating assumptions no longer match current execution capacity?",
+    "What prevents new AI capacity from becoming realised organisational value?"
+  ],
+  leadership: [
+    "Is governance keeping pace with AI execution speed?",
+    "Which executive decisions have become operational bottlenecks?",
+    "Where is leadership capacity limiting organisational adaptation?",
+    "Which governance forums operate too slowly for current AI use?",
+    "What leadership work should be redesigned rather than simply increased?"
+  ],
+  architecture: [
+    "Which architectural choices now determine operating economics?",
+    "Where are we dependent on a single model or provider?",
+    "Which workflows lack resilient fallback paths?",
+    "Where does architecture constrain organisational capacity?",
+    "What architectural risks become business risks if AI usage doubles?"
+  ],
+  culture: [
+    "What behaviours does the organisation actually reward?",
+    "Where do incentives undermine coordination?",
+    "Which cultural patterns slow responsible AI adoption?",
+    "Where does political behaviour replace operational transparency?",
+    "If incentives remain unchanged, what culture will naturally emerge?"
+  ],
 };
 
 const ROOT_MODEL = {
@@ -622,6 +679,7 @@ function showCategory(key, highlightModel){
 
   const modelCards = cat.models.map(mk => renderModelCard(mk)).join('');
   const toolCard = cat.tool ? renderToolCard(cat.tool) : '';
+  const questions = (EXEC_QUESTIONS[key] || []).map(q => `<li>${q}</li>`).join('');
 
   app.innerHTML = `
     <div class="wrap">
@@ -632,6 +690,10 @@ function showCategory(key, highlightModel){
       </div>
       ${modelCards}
       ${toolCard}
+      <div class="exec-questions">
+        <div class="rec-label">Executive questions</div>
+        <ul class="exec-list">${questions}</ul>
+      </div>
       <div class="back-row">
         <button class="action-btn" onclick="showMap()">← Back to the map</button>
       </div>
@@ -694,10 +756,6 @@ function renderModelCard(key){
         <div class="connected-label" style="margin-top:10px;">← Driven by</div>
         <div class="chip-row">${chipsIn}</div>
       ` : ''}
-      <div class="recommendation">
-        <div class="rec-label">Recommended focus</div>
-        <div class="rec-text">${m.recommendation}</div>
-      </div>
       ${outgoing.length ? `
         <button class="trace-btn" onclick="toggleChain('${key}')">Trace the chain →</button>
         <div class="chain-panel" id="chain-${key}"></div>
