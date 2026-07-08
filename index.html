@@ -155,7 +155,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex
 <body>
 
 <nav>
-  <div class="nav-logo" style="cursor:pointer;" onclick="showMap()">BÜCHEMEIER <span>CONSULTING</span></div>
+  <a class="nav-logo" href="https://www.buchemeier.no" style="text-decoration:none;">BÜCHEMEIER <span>CONSULTING</span></a>
   <div class="nav-links">
     <a class="nav-link ext" href="https://calc.buchemeier.no" target="_blank" rel="noopener">Cost Simulator ↗</a>
   </div>
@@ -169,7 +169,7 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex
 </div>
 
 <footer>
-  <div>© 2026 Büchemeier Consulting · diagnose.buchemeier.no</div>
+  <div>© 2026 <a href="https://www.buchemeier.no" style="color:inherit;">Büchemeier Consulting</a> · diagnose.buchemeier.no</div>
 </footer>
 
 <script>
@@ -678,7 +678,8 @@ function renderMap(){
     </div>
     <div class="wrap">
       <div class="map-box">${buildMapSVG()}</div>
-      <div class="map-hint">Line thickness = connection strength · two arrows = mutual influence</div>
+      <div class="map-hint">Click any mechanism to explore →</div>
+      <div class="map-hint" style="margin-top:4px;">Line thickness = connection strength · two arrows = mutual influence</div>
     </div>
   `;
 }
