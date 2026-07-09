@@ -164,6 +164,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 
 /* lightbox */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.82);z-index:100;align-items:center;justify-content:center;padding:1.5rem}
+.inquiry-modal-panel{max-width:560px;width:100%;max-height:85vh;overflow-y:auto;margin:0;}
 .modal-overlay.open{display:flex}
 .lightbox-img{max-width:100%;max-height:90vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .modal-close{position:fixed;top:1.25rem;right:1.5rem;background:none;border:none;color:var(--text);font-size:26px;cursor:pointer;line-height:1}
@@ -191,6 +192,40 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex
 <div class="modal-overlay" id="lightbox" onclick="closeLightbox(event)">
   <button class="modal-close" onclick="closeLightbox(event)">&times;</button>
   <img class="lightbox-img" id="lightbox-img" src="" alt="">
+</div>
+
+<div class="modal-overlay" id="inquiry-modal" onclick="closeInquiryModal(event)">
+  <button class="modal-close" onclick="closeInquiryModal(event)">&times;</button>
+  <div class="inquiry-panel inquiry-modal-panel" onclick="event.stopPropagation();">
+    <div class="cat-eyebrow">Advisory Inquiry</div>
+    <h3 class="inquiry-title">Reach out if there is a relevant basis for a conversation.</h3>
+    <p class="inquiry-text">If your organisation is working with operational AI, workflow automation or AI-driven transformation, feel free to reach out.</p>
+    <p class="inquiry-text">The simulator and frameworks on this site are intended to support operational understanding and strategic discussion — not production assessment or forecasting.</p>
+    <p class="inquiry-text">Initial conversations are focused on understanding organisational context, operational challenges, AI maturity, and whether there is a relevant basis for advisory or interim collaboration.</p>
+
+    <form id="inquiry-form" onsubmit="submitInquiry(event)">
+      <div class="inquiry-row">
+        <div class="inquiry-field">
+          <label for="inq-name">Name</label>
+          <input type="text" id="inq-name" name="name" required>
+        </div>
+        <div class="inquiry-field">
+          <label for="inq-company">Company</label>
+          <input type="text" id="inq-company" name="company" required>
+        </div>
+      </div>
+      <div class="inquiry-field">
+        <label for="inq-email">Work email</label>
+        <input type="email" id="inq-email" name="email" required>
+      </div>
+      <div class="inquiry-field">
+        <label for="inq-usecase">Describe your use case</label>
+        <textarea id="inq-usecase" name="usecase" rows="4" required></textarea>
+      </div>
+      <button type="submit" class="cta-btn" id="inquiry-submit-btn">Send inquiry →</button>
+      <div id="inquiry-status" class="inquiry-status"></div>
+    </form>
+  </div>
 </div>
 
 <footer>
@@ -706,7 +741,7 @@ function renderMap(){
       <div class="map-hint">Click any mechanism to explore →</div>
       <div class="map-hint" style="margin-top:4px;">Line thickness = connection strength · two arrows = mutual influence</div>
       <div style="text-align:center;margin-top:28px;">
-        <a class="cta-btn" href="#" onclick="goToInquiry();return false;">Advisory inquiry →</a>
+        <a class="cta-btn" href="#" onclick="openInquiryModal();return false;">Advisory inquiry →</a>
       </div>
     </div>
   `;
@@ -715,12 +750,12 @@ function renderMap(){
 /* ---------------------------------------------------------
    ROOT MODEL VIEW — the centre node's own page
 --------------------------------------------------------- */
-function goToInquiry(){
-  showRoot();
-  setTimeout(() => {
-    const el = document.getElementById('inquiry-panel');
-    if(el) el.scrollIntoView({ behavior:'smooth', block:'start' });
-  }, 60);
+function openInquiryModal(){
+  document.getElementById('inquiry-modal').classList.add('open');
+}
+function closeInquiryModal(e){
+  if(e) e.stopPropagation();
+  document.getElementById('inquiry-modal').classList.remove('open');
 }
 
 function showRoot(){
@@ -773,35 +808,8 @@ function showRoot(){
         </div>
       </div>
 
-      <div class="inquiry-panel" id="inquiry-panel">
-        <div class="cat-eyebrow">Advisory Inquiry</div>
-        <h3 class="inquiry-title">Reach out if there is a relevant basis for a conversation.</h3>
-        <p class="inquiry-text">If your organisation is working with operational AI, workflow automation or AI-driven transformation, feel free to reach out.</p>
-        <p class="inquiry-text">The simulator and frameworks on this site are intended to support operational understanding and strategic discussion — not production assessment or forecasting.</p>
-        <p class="inquiry-text">Initial conversations are focused on understanding organisational context, operational challenges, AI maturity, and whether there is a relevant basis for advisory or interim collaboration.</p>
-
-        <form id="inquiry-form" onsubmit="submitInquiry(event)">
-          <div class="inquiry-row">
-            <div class="inquiry-field">
-              <label for="inq-name">Name</label>
-              <input type="text" id="inq-name" name="name" required>
-            </div>
-            <div class="inquiry-field">
-              <label for="inq-company">Company</label>
-              <input type="text" id="inq-company" name="company" required>
-            </div>
-          </div>
-          <div class="inquiry-field">
-            <label for="inq-email">Work email</label>
-            <input type="email" id="inq-email" name="email" required>
-          </div>
-          <div class="inquiry-field">
-            <label for="inq-usecase">Describe your use case</label>
-            <textarea id="inq-usecase" name="usecase" rows="4" required></textarea>
-          </div>
-          <button type="submit" class="cta-btn" id="inquiry-submit-btn">Send inquiry →</button>
-          <div id="inquiry-status" class="inquiry-status"></div>
-        </form>
+      <div style="text-align:center;margin-top:28px;">
+        <a class="cta-btn" href="#" onclick="openInquiryModal();return false;">Advisory inquiry →</a>
       </div>
 
       <div class="back-row">
@@ -986,7 +994,7 @@ function openLightbox(src, alt){
   document.getElementById('lightbox').classList.add('open');
 }
 function closeLightbox(e){ if(e) e.stopPropagation(); document.getElementById('lightbox').classList.remove('open'); }
-document.addEventListener('keydown', (e) => { if(e.key==='Escape') closeLightbox(); });
+document.addEventListener('keydown', (e) => { if(e.key==='Escape'){ closeLightbox(); closeInquiryModal(); } });
 
 /* ---------------------------------------------------------
    ADVISORY INQUIRY FORM (EmailJS)
@@ -1045,7 +1053,7 @@ function submitInquiry(e){
 }
 
 window.showMap=showMap; window.showCategory=showCategory; window.showRoot=showRoot; window.showAll=showAll;
-window.goToInquiry=goToInquiry;
+window.goToInquiry=openInquiryModal; window.openInquiryModal=openInquiryModal; window.closeInquiryModal=closeInquiryModal;
 window.submitInquiry=submitInquiry;
 window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.toggleChain=toggleChain;
 
