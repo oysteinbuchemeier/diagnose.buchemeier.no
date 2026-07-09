@@ -109,6 +109,30 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .role-chip-row{display:flex;flex-wrap:wrap;gap:6px}
 .perspective-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
 .disagree-panel{margin:16px 0;padding:22px 26px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg)}
+
+.value-layer-diagram{display:flex;flex-direction:column;align-items:center;gap:2px;margin:20px 0 28px;padding:24px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg)}
+
+.stack-diagram{display:flex;flex-direction:column;align-items:center;gap:0;margin:22px 0 4px}
+.stack-box{width:100%;max-width:480px;text-align:center;padding:20px 24px;border-radius:12px;cursor:pointer;transition:border-color 0.15s, transform 0.15s}
+.stack-box:hover{transform:translateY(-1px)}
+.stack-box.top{background:var(--accent-bg);border:1px solid rgba(108,164,171,0.45)}
+.stack-box.top:hover{border-color:var(--accent)}
+.stack-box.bottom{background:var(--bg3);border:1px solid var(--border2)}
+.stack-box.bottom:hover{border-color:var(--accent)}
+.stack-title{font-family:var(--sans);font-size:14px;font-weight:600;letter-spacing:0.04em;color:var(--text)}
+.stack-sub{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:6px}
+.stack-arrow{font-size:18px;color:var(--accent2);line-height:1;margin:6px 0;opacity:0.8}
+.stack-mechlist{margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--text3);line-height:1.8;letter-spacing:0.02em}
+@media(max-width:520px){ .stack-mechlist{font-size:10.5px;} }
+.value-layer-step{font-family:var(--sans);font-size:14px;color:var(--text2);text-align:center;padding:10px 18px;border-radius:8px;line-height:1.4}
+.value-layer-step.highlight{background:var(--accent-bg);border:1px solid rgba(108,164,171,0.4);color:var(--text);font-weight:500;font-size:15px}
+.value-layer-step.highlight span{font-family:var(--mono);font-size:11px;color:var(--text3);font-weight:400}
+.value-layer-arrow{font-family:var(--mono);color:var(--accent2);font-size:16px;line-height:1}
+
+.value-flow-panel{margin-bottom:4px}
+.value-flow-arrow{text-align:center;font-family:var(--mono);color:var(--accent2);font-size:15px;margin:14px 0;display:flex;align-items:center;justify-content:center;gap:8px}
+.value-flow-arrow span{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em}
+.value-note{margin-top:16px;padding:14px 18px;background:rgba(108,164,171,0.08);border-left:2px solid var(--accent);border-radius:0 8px 8px 0;font-size:13.5px;color:var(--text2);line-height:1.55;font-style:italic}
 .disagree-text{font-size:13.5px;color:var(--text2);line-height:1.6;margin-top:6px}
 .disagree-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:14px 0 0}
 .disagree-list li{font-size:13.5px;color:var(--text2);line-height:1.5;display:flex;gap:8px;align-items:baseline}
@@ -539,6 +563,53 @@ const EXEC_QUESTIONS = {
   ],
 };
 
+const VALUE_LAYER = {
+  title: "AI Value Creation Model",
+  subtitle: "Competitive advantage is not created by AI alone. It emerges when leadership continuously converts AI capability into customer value through operating model evolution.",
+  img: "assets/models/ai-value-creation.png",
+  purpose: "The AI Value Creation Model explains how organisations transform AI capability into measurable business value and sustainable competitive advantage. Unlike the seven operating mechanisms, which explain where AI creates pressure, this model explains how executive leadership converts that pressure into long-term value.",
+  whyItMatters: "Organisations rarely fail because they lack AI capability. They struggle because capability is not consistently translated into customer outcomes, operational improvement and strategic advantage. The difference is rarely the technology itself. It is the organisation's ability to make decisions, evolve its operating model and continuously convert learning into value.",
+  perspectives: {
+    items: [
+      { role:"Board", text:"Long-term value creation, capital allocation and competitive positioning." },
+      { role:"CEO", text:"Strategy execution, operating model evolution and organisational performance." },
+      { role:"Executive Team", text:"Leadership decisions, prioritisation and cross-functional execution." }
+    ],
+    synthesis: "Different executive perspectives focus on different parts of the value system, but sustainable advantage emerges only when these perspectives remain aligned."
+  },
+  earlySignals: [
+    "New customer behaviours emerging",
+    "AI revealing previously invisible opportunities",
+    "Faster experimentation cycles",
+    "Higher decision quality",
+    "New workflow patterns appearing",
+    "Cross-functional innovation increasing"
+  ],
+  lateSignals: [
+    "New revenue streams",
+    "Lower operating cost",
+    "Faster time-to-market",
+    "New operating models",
+    "Competitive differentiation",
+    "Sustainable organisational capabilities"
+  ],
+  questions: [
+    "Where is AI creating new value rather than simply reducing cost?",
+    "Which customer problems become solvable because AI changes our operating capability?",
+    "What operating model changes are required to scale that value?",
+    "Which leadership decisions unlock the greatest competitive advantage?",
+    "How do we ensure today's AI investments become tomorrow's strategic capabilities?",
+    "Where are we creating value that competitors cannot easily replicate?"
+  ],
+  relationshipIntro: "The seven operating mechanisms explain:",
+  relationshipPoints: [
+    "where operational pressure emerges,",
+    "how that pressure moves across the organisation,",
+    "and where operating model strain develops."
+  ],
+  relationshipClose: "The AI Value Creation Model explains what executive leadership does with that understanding. It shows how organisations convert operational capability into sustainable competitive advantage through strategy, governance, leadership and operating model evolution."
+};
+
 const ROOT_MODEL = {
   title: "AI Operating Reference System",
   img: "assets/models/meta-framework.png",
@@ -551,7 +622,7 @@ const ROOT_MODEL = {
     "Capacity increases faster than the organisation can absorb it"
   ],
   keyInsight: "AI pressure does not stay where it starts. It moves through architecture, cost, governance, capacity, coordination, culture and leadership — changing the operating model as it moves.",
-  containsLabel: "Every mechanism's pressure is read through this model — it's how the pattern becomes visible and actionable, not another node the pressure simply passes through.",
+  containsLabel: "The Reference System explains both sides of AI transformation: how operational pressure emerges, and how leadership converts that pressure into sustainable competitive advantage.",
   drivenByText: "Nothing in the framework drives the reference system on its own. It's fed by all seven at once — that's exactly what the inward arrows on the map show.",
   diagnosticQuestions: [
     "Where does AI pressure first enter the organisation?",
@@ -844,17 +915,20 @@ function renderMap(){
   setActiveNav();
   app.innerHTML = `
     <div class="hero">
-      <div class="hero-eyebrow">AI Operating Model Framework</div>
-      <h1>A <strong>reference system</strong> for how AI pressure moves through an organisation</h1>
-      <p>AI rarely creates an isolated problem. Pressure in one part of the operating model spreads into the next: architecture drives cost, cost forces governance scrutiny, governance produces coordination strain, and coordination strain reshapes leadership capacity.</p>
-      <p>This reference system maps that movement.</p>
+      <div class="hero-eyebrow">The AI Operating Reference System</div>
+      <p>AI rarely creates one isolated problem.</p>
+      <p>The seven operating mechanisms show how AI pressure moves through the organisation.</p>
+      <p>The AI Value Creation Model shows how leadership converts those dynamics into sustainable competitive advantage.</p>
+      <a class="cta-btn" href="#" onclick="showValue();return false;" style="margin-top:20px;">Explore the AI Value Creation Model →</a>
     </div>
     <div class="wrap">
-      <div class="map-box">${buildMapSVG()}</div>
+
+      <div class="map-box" style="margin-top:32px;">${buildMapSVG()}</div>
       <div class="map-hint">Click any mechanism to explore →</div>
       <div class="map-hint" style="margin-top:4px;">Line thickness = connection strength · two arrows = mutual influence</div>
-      <div style="text-align:center;margin-top:28px;">
-        <a class="cta-btn" href="#" onclick="openInquiryModal();return false;">Advisory inquiry →</a>
+
+      <div style="text-align:center;margin-top:20px;">
+        <a class="cta-btn" href="#" onclick="openInquiryModal();return false;" style="background:var(--bg3);border:1px solid var(--border2);">Advisory inquiry →</a>
       </div>
     </div>
   `;
@@ -869,6 +943,78 @@ function openInquiryModal(){
 function closeInquiryModal(e){
   if(e) e.stopPropagation();
   document.getElementById('inquiry-modal').classList.remove('open');
+}
+
+function showValue(){
+  view = "value";
+  setActiveNav();
+  const v = VALUE_LAYER;
+
+  app.innerHTML = `
+    <div class="wrap">
+      <div class="cat-head">
+        <div class="cat-eyebrow">Value Model</div>
+        <div class="cat-title">${v.title}</div>
+        <div class="cat-desc">${v.subtitle}</div>
+      </div>
+
+      <div class="value-layer-diagram">
+        <div class="value-layer-step">AI Capability</div>
+        <div class="value-layer-arrow">↓</div>
+        <div class="value-layer-step highlight">AI Operating Reference System<br><span>7 connected operating mechanisms</span></div>
+        <div class="value-layer-arrow">↓</div>
+        <div class="value-layer-step">AI Value Creation Model</div>
+      </div>
+
+      <div class="model-thumb" onclick="openLightbox('${v.img}','${v.title}')" style="width:100%;height:auto;max-width:100%;margin-bottom:8px;">
+        <img src="${v.img}" alt="${v.title} — full poster">
+      </div>
+      <div class="thumb-cap" style="text-align:center;margin-bottom:20px;">🔍 Click to view the full AI Value Creation Model poster</div>
+
+      <div class="model-card">
+        <div class="symptoms-label">Purpose</div>
+        <p class="disagree-text">${v.purpose}</p>
+
+        <div class="symptoms-label" style="margin-top:18px;">Why it matters</div>
+        <p class="disagree-text">${v.whyItMatters}</p>
+
+        <div class="disagree-panel" style="margin-top:20px;">
+          <div class="exec-summary-label">Executive perspectives</div>
+          <div class="perspective-list">
+            ${v.perspectives.items.map(i => `<div class="perspective-item"><span class="perspective-role">${i.role}</span><span class="perspective-text">${i.text}</span></div>`).join('')}
+          </div>
+          <div class="perspective-synthesis"><span class="system-insight-tag">System Insight</span>${v.perspectives.synthesis}</div>
+        </div>
+
+        <div class="exec-summary-row" style="margin-top:20px;">
+          <div class="exec-summary-col">
+            <div class="exec-summary-label">Early signals</div>
+            <ul class="signal-list">${v.earlySignals.map(s => `<li>${s}</li>`).join('')}</ul>
+          </div>
+          <div class="exec-summary-col">
+            <div class="exec-summary-label">Late signals</div>
+            <ul class="signal-list late">${v.lateSignals.map(s => `<li>${s}</li>`).join('')}</ul>
+          </div>
+        </div>
+
+        <div class="exec-questions" style="margin-top:20px;">
+          <div class="rec-label">Executive questions</div>
+          <ul class="exec-list">${v.questions.map(q => `<li>${q}</li>`).join('')}</ul>
+        </div>
+
+        <div class="disagree-panel" style="margin-top:20px;">
+          <div class="exec-summary-label">Relationship to the AI Operating Reference System</div>
+          <p class="disagree-text">${v.relationshipIntro}</p>
+          <ul class="signal-list" style="margin-top:8px;">${v.relationshipPoints.map(p => `<li>${p}</li>`).join('')}</ul>
+          <p class="disagree-text" style="margin-top:12px;">${v.relationshipClose}</p>
+        </div>
+      </div>
+
+      <div class="back-row">
+        <button class="action-btn" onclick="showMap()">← Back to the map</button>
+      </div>
+    </div>
+  `;
 }
 
 function showRoot(){
@@ -933,10 +1079,6 @@ function showRoot(){
             ${r.diagnosticQuestions.map(q => `<li>${q}</li>`).join('')}
           </ul>
         </div>
-      </div>
-
-      <div style="text-align:center;margin-top:28px;">
-        <a class="cta-btn" href="#" onclick="openInquiryModal();return false;">Advisory inquiry →</a>
       </div>
 
       <div class="back-row">
@@ -1203,7 +1345,7 @@ function submitInquiry(e){
     });
 }
 
-window.showMap=showMap; window.showCategory=showCategory; window.showRoot=showRoot; window.showAll=showAll;
+window.showMap=showMap; window.showCategory=showCategory; window.showRoot=showRoot; window.showAll=showAll; window.showValue=showValue;
 window.goToInquiry=openInquiryModal; window.openInquiryModal=openInquiryModal; window.closeInquiryModal=closeInquiryModal;
 window.submitInquiry=submitInquiry;
 window.openLightbox=openLightbox; window.closeLightbox=closeLightbox; window.toggleChain=toggleChain;
