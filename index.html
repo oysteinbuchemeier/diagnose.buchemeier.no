@@ -184,6 +184,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .tool-card .tool-text h4{font-size:15px;color:var(--text);margin-bottom:4px}
 .tool-card .tool-text p{font-size:13px;color:var(--text2)}
 .cta-btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;border:none;padding:10px 18px;font-size:13px;font-family:var(--sans);font-weight:500;border-radius:8px;cursor:pointer;text-decoration:none;transition:opacity 0.15s;white-space:nowrap}
+.text-link{color:var(--accent2);font-size:14px;font-family:var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer;transition:color 0.15s}
+.text-link:hover{color:var(--text)}
 .cta-btn:hover{opacity:0.85}
 
 .back-row{margin-top:1.5rem}
@@ -565,7 +567,7 @@ const EXEC_QUESTIONS = {
 
 const VALUE_LAYER = {
   title: "AI Value Creation Model",
-  subtitle: "Competitive advantage is not created by AI alone. It emerges when leadership continuously converts AI capability into customer value through operating model evolution.",
+  subtitle: "The executive end state for AI operating models.",
   img: "assets/models/ai-value-creation.png",
   purpose: "The AI Value Creation Model explains how organisations transform AI capability into measurable business value and sustainable competitive advantage. Unlike the seven operating mechanisms, which explain where AI creates pressure, this model explains how executive leadership converts that pressure into long-term value.",
   whyItMatters: "Organisations rarely fail because they lack AI capability. They struggle because capability is not consistently translated into customer outcomes, operational improvement and strategic advantage. The difference is rarely the technology itself. It is the organisation's ability to make decisions, evolve its operating model and continuously convert learning into value.",
@@ -915,15 +917,22 @@ function renderMap(){
   setActiveNav();
   app.innerHTML = `
     <div class="hero">
-      <div class="hero-eyebrow">The AI Operating Reference System</div>
-      <p>AI rarely creates one isolated problem.</p>
-      <p>The seven operating mechanisms show how AI pressure moves through the organisation.</p>
-      <p>The AI Value Creation Model shows how leadership converts those dynamics into sustainable competitive advantage.</p>
-      <a class="cta-btn" href="#" onclick="showValue();return false;" style="margin-top:20px;">Explore the AI Value Creation Model →</a>
+      <div class="hero-eyebrow">AI Value Creation Model</div>
+      <p style="font-style:italic;color:var(--text3);">The executive end state</p>
+      <p>AI does not create sustainable competitive advantage on its own.</p>
+      <p>Value emerges when executive leadership converts AI capability into customer value, operating capability and strategic differentiation.</p>
+      <a href="#" onclick="showValue();return false;" class="text-link" style="display:inline-block;margin-top:14px;">Explore the AI Value Creation Model →</a>
     </div>
+
+    <div class="hero" style="padding-top:1.75rem;">
+      <div class="hero-eyebrow">AI Operating Reference System</div>
+      <p>The seven operating mechanisms explain what must work for that value creation to happen.</p>
+      <p>They show how AI pressure moves through coordination, governance, cost, capacity, leadership, architecture and culture — and why organisations either move toward, or away from, sustainable value creation.</p>
+    </div>
+
     <div class="wrap">
 
-      <div class="map-box" style="margin-top:32px;">${buildMapSVG()}</div>
+      <div class="map-box" style="margin-top:24px;">${buildMapSVG()}</div>
       <div class="map-hint">Click any mechanism to explore →</div>
       <div class="map-hint" style="margin-top:4px;">Line thickness = connection strength · two arrows = mutual influence</div>
 
@@ -956,14 +965,6 @@ function showValue(){
         <div class="cat-eyebrow">Value Model</div>
         <div class="cat-title">${v.title}</div>
         <div class="cat-desc">${v.subtitle}</div>
-      </div>
-
-      <div class="value-layer-diagram">
-        <div class="value-layer-step">AI Capability</div>
-        <div class="value-layer-arrow">↓</div>
-        <div class="value-layer-step highlight">AI Operating Reference System<br><span>7 connected operating mechanisms</span></div>
-        <div class="value-layer-arrow">↓</div>
-        <div class="value-layer-step">AI Value Creation Model</div>
       </div>
 
       <div class="model-thumb" onclick="openLightbox('${v.img}','${v.title}')" style="width:100%;height:auto;max-width:100%;margin-bottom:8px;">
