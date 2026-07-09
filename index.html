@@ -108,6 +108,11 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .exec-summary-label{font-family:var(--mono);font-size:10.5px;color:var(--accent2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px}
 .role-chip-row{display:flex;flex-wrap:wrap;gap:6px}
 .perspective-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.disagree-panel{margin:16px 0;padding:22px 26px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.disagree-text{font-size:13.5px;color:var(--text2);line-height:1.6;margin-top:6px}
+.disagree-list{list-style:none;display:flex;flex-direction:column;gap:8px;margin:14px 0 0}
+.disagree-list li{font-size:13.5px;color:var(--text2);line-height:1.5;display:flex;gap:8px;align-items:baseline}
+.disagree-list .perspective-role{min-width:auto}
 .perspective-item{display:flex;gap:10px;align-items:baseline;font-size:13.5px;line-height:1.45}
 .perspective-role{font-family:var(--mono);font-weight:500;color:var(--accent2);flex:none;min-width:52px}
 .perspective-text{color:var(--text2)}
@@ -889,6 +894,20 @@ function showRoot(){
             <h4>${r.title}</h4>
             <div class="mechanism">${r.mechanism}</div>
           </div>
+        </div>
+
+        <div class="disagree-panel">
+          <div class="exec-summary-label">How executives see the same system</div>
+          <p class="disagree-text">Executives do not experience AI pressure from the same position in the organisation.</p>
+          <ul class="disagree-list">
+            <li><span class="perspective-role">CFO</span> may see rising cost.</li>
+            <li><span class="perspective-role">CIO</span> may see architectural constraints.</li>
+            <li><span class="perspective-role">CISO</span> may see control and compliance exposure.</li>
+            <li><span class="perspective-role">COO</span> may see coordination strain.</li>
+            <li><span class="perspective-role">CEO</span> may see slowing execution.</li>
+          </ul>
+          <p class="disagree-text" style="margin-top:12px;">These perspectives are not contradictions. They are partial views of the same operating system.</p>
+          <div class="perspective-synthesis"><span class="system-insight-tag">System Insight</span>The reference system connects them into one operating picture.</div>
         </div>
 
         <div class="symptoms-label">Common signals</div>
