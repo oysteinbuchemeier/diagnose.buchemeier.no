@@ -103,6 +103,24 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 2rem
 .key-insight .ki-text{font-size:13.5px;color:var(--text);line-height:1.55;font-style:italic}
 
 .recommendation{margin-top:14px;padding:12px 14px;background:rgba(45,212,160,0.07);border:1px solid rgba(45,212,160,0.22);border-radius:8px}
+.exec-summary{margin-bottom:20px;padding:22px 26px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg)}
+.exec-summary-row{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.exec-summary-label{font-family:var(--mono);font-size:10.5px;color:var(--accent2);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:8px}
+.role-chip-row{display:flex;flex-wrap:wrap;gap:6px}
+.perspective-list{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.perspective-item{display:flex;gap:10px;align-items:baseline;font-size:13.5px;line-height:1.45}
+.perspective-role{font-family:var(--mono);font-weight:500;color:var(--accent2);flex:none;min-width:52px}
+.perspective-text{color:var(--text2)}
+.perspective-synthesis{margin-top:14px;padding-top:14px;border-top:1px solid var(--border);font-size:13px;font-style:italic;color:var(--text3);line-height:1.55}
+.system-insight-tag{display:inline-block;font-family:var(--mono);font-style:normal;font-size:10px;font-weight:500;letter-spacing:0.06em;text-transform:uppercase;color:var(--amber);background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:4px;padding:2px 7px;margin-right:9px;vertical-align:middle;}
+
+.role-chip{background:var(--accent-bg);border:1px solid rgba(108,164,171,0.35);color:var(--accent2);font-size:12px;font-family:var(--sans);font-weight:500;padding:4px 10px;border-radius:20px}
+.signal-list{list-style:none;display:flex;flex-direction:column;gap:5px}
+.signal-list li{font-size:12.5px;color:var(--text2);line-height:1.4;padding-left:16px;position:relative}
+.signal-list li::before{content:'○';position:absolute;left:0;color:var(--accent2);font-size:9px;top:3px}
+.signal-list.late li::before{content:'●';color:var(--amber)}
+@media(max-width:640px){ .exec-summary-row{grid-template-columns:1fr;gap:14px;} }
+
 .exec-questions{margin-top:8px;padding:20px 24px;background:rgba(45,212,160,0.07);border:1px solid rgba(45,212,160,0.22);border-radius:var(--radius-lg)}
 .exec-list{list-style:none;display:flex;flex-direction:column;gap:10px;margin-top:10px}
 .exec-list li{font-size:14px;color:var(--text);line-height:1.5;padding-left:20px;position:relative}
@@ -372,6 +390,96 @@ const TOOLS = {
     cta:"Open the simulator",
     img:"assets/models/cost-simulator.png"
   }
+};
+
+const MECH_PERSPECTIVES = {
+  architecture: {
+    items: [
+      { role:"CIO", text:"Model and infrastructure architecture." },
+      { role:"CEO", text:"Execution reliability and strategic risk." },
+      { role:"CFO", text:"Economic exposure and operating cost." }
+    ],
+    synthesis: "The same architecture decision can surface as a technical, executive and financial concern at the same time."
+  },
+  coordination: {
+    items: [
+      { role:"COO", text:"Execution flow and operational continuity." },
+      { role:"CFO", text:"Cost efficiency and operating leverage." },
+      { role:"CIO", text:"Governance, ownership and workflow integrity." }
+    ],
+    synthesis: "The same coordination strain can appear as different operational problems depending on executive perspective."
+  },
+  cost: {
+    items: [
+      { role:"CFO", text:"Operating economics and financial sustainability." },
+      { role:"CIO", text:"Architecture efficiency and orchestration design." },
+      { role:"CEO", text:"Strategic investment and governance effectiveness." }
+    ],
+    synthesis: "The same cost signal may reflect architectural, operational and governance decisions rather than model pricing alone."
+  },
+  governance: {
+    items: [
+      { role:"CISO", text:"Compliance and control." },
+      { role:"COO", text:"Decision flow and operational ownership." },
+      { role:"CIO", text:"Technical governance and execution boundaries." }
+    ],
+    synthesis: "One governance gap can appear simultaneously as compliance, execution and technology issues."
+  },
+  capacity: {
+    items: [
+      { role:"COO", text:"Delivery capacity." },
+      { role:"CFO", text:"Value realisation." },
+      { role:"CIO", text:"Technical scalability." }
+    ],
+    synthesis: "Unabsorbed AI capacity often appears as separate operational, financial and technical challenges before the organisation recognises the common cause."
+  },
+  leadership: {
+    items: [
+      { role:"CEO", text:"Strategic execution." },
+      { role:"Board", text:"Oversight and governance." },
+      { role:"COO", text:"Leadership bandwidth and decision tempo." }
+    ],
+    synthesis: "The same leadership constraint is often interpreted differently depending on governance responsibility."
+  },
+  culture: {
+    items: [
+      { role:"CHRO", text:"Behaviour and talent." },
+      { role:"COO", text:"Execution discipline." },
+      { role:"CEO", text:"Organisational resilience and reputation." }
+    ],
+    synthesis: "What appears to be a culture problem is often the accumulated result of incentives, structures and operating decisions."
+  },
+};
+
+const MECH_SIGNALS = {
+  coordination: {
+    early: ["Decision queues growing","More manual handovers","Cross-functional clarification increasing"],
+    late: ["Project delays","Cost escalation","Executive frustration","Shadow AI"]
+  },
+  architecture: {
+    early: ["Single-model dependency growing","Latency variability across workflows","Ad-hoc tool choices per team"],
+    late: ["Vendor lock-in becomes visible","Compliance exposure","Forced re-platforming"]
+  },
+  cost: {
+    early: ["Cost per workflow untracked","Retries and context growth unnoticed","Model chosen without architecture review"],
+    late: ["Budget overruns","Finance questioning AI spend","Cost outpacing realised value"]
+  },
+  governance: {
+    early: ["Decision ownership ambiguous","AI recommendations going unquestioned","No audit trail forming"],
+    late: ["Compliance exposure discovered","Board asking who's accountable","Regulatory scrutiny"]
+  },
+  capacity: {
+    early: ["Activity increasing without clear output","Pilots multiplying","Absorption not tracked"],
+    late: ["Initiatives stalling","\"More AI, same results\" frustration","Capacity investment written off"]
+  },
+  leadership: {
+    early: ["Governance meetings can't keep pace","Decisions queuing at the top","Informal workarounds emerging"],
+    late: ["Leadership burnout","Operating model visibly behind execution","Emergency restructuring"]
+  },
+  culture: {
+    early: ["Declared values quietly diverging from practice","Silence in escalation channels","Local workarounds normalised"],
+    late: ["Trust breakdown visible","Political behaviour dominant","Talent attrition"]
+  },
 };
 
 const EXEC_QUESTIONS = {
@@ -831,6 +939,29 @@ function showCategory(key, highlightModel){
   const toolCard = cat.tool ? renderToolCard(cat.tool) : '';
   const questions = (EXEC_QUESTIONS[key] || []).map(q => `<li>${q}</li>`).join('');
 
+  const persp = MECH_PERSPECTIVES[key];
+  const sig = MECH_SIGNALS[key];
+  const execSummary = (persp && sig) ? `
+    <div class="exec-summary">
+      <div class="exec-summary-label">Executive perspectives</div>
+      <div class="perspective-list">
+        ${persp.items.map(i => `<div class="perspective-item"><span class="perspective-role">${i.role}</span><span class="perspective-text">${i.text}</span></div>`).join('')}
+      </div>
+      <div class="perspective-synthesis"><span class="system-insight-tag">System Insight</span>${persp.synthesis}</div>
+
+      <div class="exec-summary-row" style="margin-top:20px;">
+        <div class="exec-summary-col">
+          <div class="exec-summary-label">Early signals</div>
+          <ul class="signal-list">${sig.early.map(s => `<li>${s}</li>`).join('')}</ul>
+        </div>
+        <div class="exec-summary-col">
+          <div class="exec-summary-label">Late signals</div>
+          <ul class="signal-list late">${sig.late.map(s => `<li>${s}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>
+  ` : '';
+
   app.innerHTML = `
     <div class="wrap">
       <div class="cat-head">
@@ -838,6 +969,7 @@ function showCategory(key, highlightModel){
         <div class="cat-title">${cat.label}</div>
         <div class="cat-desc">${cat.desc}</div>
       </div>
+      ${execSummary}
       ${modelCards}
       ${toolCard}
       <div class="exec-questions">
