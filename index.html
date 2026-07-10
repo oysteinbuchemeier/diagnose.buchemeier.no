@@ -286,7 +286,8 @@ footer{border-top:1px solid var(--border);padding:1.25rem 2rem;display:flex;flex
 </div>
 
 <footer>
-  <div>© 2026 Büchemeier Consulting · <a href="https://www.linkedin.com/in/oystein-buchemeier/" style="color:inherit;" target="_blank" rel="noopener">LinkedIn</a> · All rights reserved. We take no responsibility for errors in models or outputs. This tool is provided for indicative use only.</div>
+  <div>© 2026 <a href="https://www.buchemeier.no" style="color:inherit;">Büchemeier Consulting</a> · <a href="https://www.linkedin.com/in/oystein-buchemeier/" style="color:inherit;" target="_blank" rel="noopener">LinkedIn</a> · All rights reserved.</div>
+  <div>We take no responsibility for errors in models or outputs. This tool is provided for indicative use only.</div>
 </footer>
 
 <script>
@@ -940,12 +941,12 @@ function renderMap(){
 
     <div class="wrap">
 
-      <div class="map-box" style="margin-top:24px;">${buildMapSVG()}</div>
-      <div class="map-hint">Click any mechanism to explore →</div>
+      <div class="map-hint" style="margin-top:24px;">Click any mechanism to explore →</div>
+      <div class="map-box">${buildMapSVG()}</div>
       <div class="map-hint" style="margin-top:4px;">Line thickness = connection strength · two arrows = mutual influence</div>
 
       <div style="text-align:center;margin-top:20px;">
-        <a class="cta-btn" href="#" onclick="openInquiryModal();return false;" style="background:var(--bg3);border:1px solid var(--border2);">Advisory inquiry →</a>
+        <a class="cta-btn" href="#" onclick="openInquiryModal();return false;">Advisory inquiry →</a>
       </div>
     </div>
   `;
