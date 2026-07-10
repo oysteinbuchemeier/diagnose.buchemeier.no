@@ -550,20 +550,25 @@ const NAV_SYMPTOMS = [
   { text:"People have quietly found their own workarounds instead of raising issues.", mech:"culture" },
 ];
 
-// Optional breadth question — NOT used for scoring (checked computationally:
-// several areas touch 4-5 of the 7 mechanisms and don't discriminate well
-// enough to calculate from). Used only for an honest context sentence.
-const NAV_AREAS = {
-  Technology: { mechs:["architecture","coordination","cost","governance","capacity"], note:"Leaders in Technology often notice pressure here first — it's one of the mechanisms most connected to the rest of the system." },
-  Operations: { mechs:["coordination","governance","capacity","leadership","culture"], note:"Leaders in Operations often notice pressure here first — it touches most of the operating mechanisms in some way." },
-  Finance: { mechs:["architecture","coordination","cost","capacity"], note:"Leaders in Finance often notice pressure here first, usually through cost or capacity signals." },
-  Leadership: { mechs:["architecture","cost","leadership","culture"], note:"Leaders at this level often notice pressure here first, particularly around leadership and culture." },
-  Risk: { mechs:["governance"], note:"Leaders in Risk most often connect this specifically to governance." },
-  Customers: { mechs:[], note:"Customer-facing signals rarely map to a single mechanism directly — they're usually a downstream effect of pressure building elsewhere in the system." },
+// Step 2 — forward-looking objective, deliberately a different axis from
+// Step 1 (which mechanism, now) rather than more precision on the same
+// axis (which department). Never overrides the Step 1 result — it only
+// adds an honest "pay attention to" note, using real neighbouring
+// mechanisms from CATEGORY_EDGES (verified, not paired by assumption).
+// Two objectives point to the AI Value Creation Model instead of a
+// mechanism pair, since customer value and competitive advantage are
+// what the end-state model — not the operating mechanisms — explains.
+const NAV_OBJECTIVES = {
+  cost: { label:"Reduce operating cost", attention:["architecture","capacity"] },
+  resilience: { label:"Improve operational resilience", attention:["architecture","leadership"] },
+  scale: { label:"Scale AI safely", attention:["architecture","coordination"] },
+  execution: { label:"Accelerate execution", attention:["governance","capacity"] },
+  customerValue: { label:"Improve customer value", valueLink:true },
+  advantage: { label:"Create new competitive advantage", valueLink:true },
 };
 
 let navSelected = [];
-let navArea = null;
+let navObjective = null;
 
 const EXEC_QUESTIONS = {
   coordination: [
@@ -1060,19 +1065,19 @@ function toggleNavSymptom(i){
 }
 
 function showNavArea(){
-  const areaButtons = Object.keys(NAV_AREAS).map(a =>
-    `<div class="nav-symptom" onclick="selectNavArea('${a}')"><span>${a}</span></div>`
+  const objButtons = Object.entries(NAV_OBJECTIVES).map(([key,o]) =>
+    `<div class="nav-symptom" onclick="selectNavArea('${key}')"><span>${o.label}</span></div>`
   ).join('');
 
   app.innerHTML = `
     <div class="wrap">
       <div class="cat-head">
         <div class="cat-eyebrow">AI Operating Navigator · Step 2 of 2</div>
-        <div class="cat-title">Where do you see this most often?</div>
-        <div class="cat-desc">Optional — this adds context, not precision, to your result.</div>
+        <div class="cat-title">If you could improve one outcome over the next 12 months, what would it be?</div>
+        <div class="cat-desc">Optional — choose one. This adds context, not precision, to your result.</div>
       </div>
       <div class="disagree-panel">
-        <div class="nav-symptom-grid">${areaButtons}</div>
+        <div class="nav-symptom-grid">${objButtons}</div>
         <div style="text-align:center;margin-top:22px;">
           <a href="#" onclick="skipNavArea();return false;" class="text-link">Skip →</a>
         </div>
@@ -1081,12 +1086,12 @@ function showNavArea(){
   `;
 }
 
-function selectNavArea(a){
-  navArea = a;
+function selectNavArea(key){
+  navObjective = key;
   showNavResult();
 }
 function skipNavArea(){
-  navArea = null;
+  navObjective = null;
   showNavResult();
 }
 
@@ -1113,14 +1118,27 @@ function showNavResult(){
   });
   const neighbourLabels = [...neighbours].map(k => CATEGORIES[k].label);
 
-  const areaNote = navArea ? `<p class="disagree-text" style="margin-top:12px;">${NAV_AREAS[navArea].note}</p>` : '';
+  // Step 2 never overrides the Step 1 result — it only adds a note,
+  // using real neighbouring mechanisms (excluding the mechanism already shown)
+  let objectiveNote = '';
+  if(navObjective){
+    const obj = NAV_OBJECTIVES[navObjective];
+    if(obj.valueLink){
+      objectiveNote = `<p class="disagree-text" style="margin-top:12px;">Your objective points beyond the operating mechanisms — explore how ${topLabel} connects to the <a href="#" onclick="showValue();return false;" class="text-link" style="display:inline;">AI Value Creation Model →</a></p>`;
+    } else {
+      const attentionMechs = obj.attention.filter(m => m !== topMech).map(m => CATEGORIES[m].label);
+      if(attentionMechs.length){
+        objectiveNote = `<p class="disagree-text" style="margin-top:12px;">Based on your objective — <em>${obj.label}</em> — pay particular attention to ${attentionMechs.join(' and ')} as you explore this mechanism.</p>`;
+      }
+    }
+  }
 
   app.innerHTML = `
     <div class="wrap">
       <div class="cat-head">
         <div class="cat-eyebrow">AI Operating Navigator · Result</div>
-        <div class="cat-title">Start here: ${topLabel}</div>
-        <div class="cat-desc">Based on the patterns you selected, ${topLabel} appears to be the most likely starting point for further exploration.</div>
+        <div class="cat-title">Suggested starting point: ${topLabel}</div>
+        <div class="cat-desc">The patterns you selected most closely match the ${topLabel} mechanism.</div>
       </div>
 
       <div class="disagree-panel">
@@ -1132,7 +1150,7 @@ function showNavResult(){
         <div class="exec-summary-label">Strongest match</div>
         <ul class="signal-list" style="margin-top:8px;">${rankedList}</ul>
 
-        ${areaNote}
+        ${objectiveNote}
 
         ${neighbourLabels.length ? `<p class="disagree-text" style="margin-top:14px;">Often connected to: ${neighbourLabels.join(', ')}.</p>` : ''}
       </div>
