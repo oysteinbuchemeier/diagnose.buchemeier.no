@@ -1175,7 +1175,7 @@ function showNavResult(){
   const originalTiedLabels = ranked.filter(([m,c])=>c===topCount).map(([m])=>CATEGORIES[m].label);
 
   const TIE_EXPLANATION = {
-    connections:`${topLabel} is suggested because it has the most connections to the rest of the AI Operating Reference System.`,
+    connections:`${topLabel} is suggested as the most useful place to begin exploring the connected operating mechanisms.`,
     downstream:`${topLabel} is suggested because it has the strongest downstream influence in the AI Operating Reference System.`,
     source:`${topLabel} is suggested because it is the direct source of pressure into the other matched mechanism, not the other way round.`,
   };
@@ -1192,7 +1192,8 @@ function showNavResult(){
     } else {
       const attentionMechs = obj.attention.filter(m => m !== topMech).map(m => CATEGORIES[m].label);
       if(attentionMechs.length){
-        objectiveNote = `<p class="disagree-text" style="margin-top:12px;">Your chosen objective places particular emphasis on ${attentionMechs.join(' and ')}. Even when ${topLabel} is the best starting point, ${obj.reason}.</p>`;
+        const reasonSentence = obj.reason.charAt(0).toUpperCase() + obj.reason.slice(1) + '.';
+        objectiveNote = `<p class="disagree-text" style="margin-top:12px;">Because your objective is to ${obj.label.toLowerCase()}, pay particular attention to ${attentionMechs.join(' and ')} as you explore the ${topLabel} mechanism. ${reasonSentence}</p>`;
       }
     }
   }
@@ -1215,7 +1216,7 @@ function showNavResult(){
 
         <div class="value-flow-arrow" style="margin:16px 0;">↓</div>
 
-        <div class="exec-summary-label">Tally</div>
+        <div class="exec-summary-label">How your selections matched</div>
         <ul class="signal-list" style="margin-top:8px;">${rankedList}</ul>
 
         ${tieIntro}
