@@ -1108,15 +1108,17 @@ function showNavResult(){
   });
   const ranked = Object.entries(counts).sort((a,b) => b[1]-a[1]);
   const topCount = ranked[0][1];
-  const tiedMechs = ranked.filter(([m,c]) => c === topCount).map(([m]) => m);
-  const isTie = tiedMechs.length > 1;
-  const topMech = ranked[0][0];
-  const topLabel = CATEGORIES[topMech].label;
-
-  const selectedList = navSelected.map(i => `<li>✔ ${NAV_SYMPTOMS[i].text}</li>`).join('');
+  let tiedMechs = ranked.filter(([m,c]) => c === topCount).map(([m]) => m);
   const rankedList = ranked.map(([m,c]) => `<li>${CATEGORIES[m].label} (${c})</li>`).join('');
+  const selectedList = navSelected.map(i => `<li>✔ ${NAV_SYMPTOMS[i].text}</li>`).join('');
 
-  // real neighbouring mechanisms from the actual causal graph, not invented
+  function outgoingWeight(mech){
+    let w = 0;
+    Object.values(CATEGORY_EDGES).forEach(dirs => {
+      Object.entries(dirs).forEach(([dirKey, weight]) => { if(dirKey.split('>')[0] === mech) w += weight; });
+    });
+    return w;
+  }
   function neighboursOf(mech){
     const n = new Set();
     Object.entries(CATEGORY_EDGES).forEach(([pair, dirs]) => {
@@ -1126,66 +1128,85 @@ function showNavResult(){
     });
     return [...n].map(k => CATEGORIES[k].label);
   }
+
+  // The navigator always returns ONE starting point — showing several
+  // would defeat the purpose of helping someone get started. But ties are
+  // never broken arbitrarily: each step below is a real, checkable property
+  // of the causal graph already built for the rest of the site, applied in
+  // order until exactly one mechanism remains.
+  let tieReason = null;
+  if(tiedMechs.length > 1){
+    // Step 1: total degree — same metric used for node size on the map
+    const maxDeg = Math.max(...tiedMechs.map(m => categoryDegree(m)));
+    const byDeg = tiedMechs.filter(m => categoryDegree(m) === maxDeg);
+    if(byDeg.length < tiedMechs.length){
+      tiedMechs = byDeg;
+      tieReason = "connections";
+    }
+  }
+  if(tiedMechs.length > 1){
+    // Step 2: outgoing weight — how much this mechanism drives the rest of the system
+    const maxOut = Math.max(...tiedMechs.map(m => outgoingWeight(m)));
+    const byOut = tiedMechs.filter(m => outgoingWeight(m) === maxOut);
+    if(byOut.length < tiedMechs.length){
+      tiedMechs = byOut;
+      tieReason = "downstream";
+    }
+  }
+  if(tiedMechs.length === 2){
+    // Step 3: if a direct edge exists between the two remaining, the source wins
+    const [m1, m2] = tiedMechs;
+    const pair = [m1,m2].sort().join('|');
+    const dirs = CATEGORY_EDGES[pair];
+    if(dirs){
+      const dirKey = Object.keys(dirs)[0];
+      const [from] = dirKey.split('>');
+      if(Object.keys(dirs).length === 1){
+        tiedMechs = [from];
+        tieReason = "source";
+      }
+    }
+  }
+
+  const topMech = tiedMechs[0];
+  const topLabel = CATEGORIES[topMech].label;
+  const wasResolvedTie = topCount === ranked[0][1] && ranked.filter(([m,c])=>c===topCount).length > 1;
+  const originalTiedLabels = ranked.filter(([m,c])=>c===topCount).map(([m])=>CATEGORIES[m].label);
+
+  const TIE_EXPLANATION = {
+    connections:`${topLabel} is suggested because it has the most connections to the rest of the AI Operating Reference System.`,
+    downstream:`${topLabel} is suggested because it has the strongest downstream influence in the AI Operating Reference System.`,
+    source:`${topLabel} is suggested because it is the direct source of pressure into the other matched mechanism, not the other way round.`,
+  };
+
   const neighbourLabels = neighboursOf(topMech);
 
   // Step 2 never overrides the Step 1 result — it only adds a note, using
-  // real neighbouring mechanisms and a concrete, grounded reason (excluding
-  // whatever mechanism(s) are already the suggested starting point)
+  // real neighbouring mechanisms and a concrete, grounded reason
   let objectiveNote = '';
   if(navObjective){
     const obj = NAV_OBJECTIVES[navObjective];
     if(obj.valueLink){
       objectiveNote = `<p class="disagree-text" style="margin-top:12px;">Your objective points beyond the operating mechanisms — explore how this connects to the <a href="#" onclick="showValue();return false;" class="text-link" style="display:inline;">AI Value Creation Model →</a></p>`;
     } else {
-      const attentionMechs = obj.attention.filter(m => !tiedMechs.includes(m)).map(m => CATEGORIES[m].label);
+      const attentionMechs = obj.attention.filter(m => m !== topMech).map(m => CATEGORIES[m].label);
       if(attentionMechs.length){
-        objectiveNote = `<p class="disagree-text" style="margin-top:12px;">Because your priority is <em>${obj.label.toLowerCase()}</em>, ${attentionMechs.join(' and ')} become especially important — ${obj.reason}.</p>`;
+        objectiveNote = `<p class="disagree-text" style="margin-top:12px;">Your chosen objective places particular emphasis on ${attentionMechs.join(' and ')}. Even when ${topLabel} is the best starting point, ${obj.reason}.</p>`;
       }
     }
   }
 
-  // qualifier phrase per mechanism type, used only when the result is tied —
-  // grounded in the same type classification already used on each mechanism page
-  const TYPE_QUALIFIER = {
-    "Structural Mechanism":"cross-functional coordination is your primary concern",
-    "Decision Mechanism":"accountability and decision rights are your primary concern",
-    "Economic Mechanism":"cost and operating economics are your primary concern",
-    "Operational Mechanism":"absorbing and scaling capacity is your primary concern",
-    "Bandwidth Mechanism":"leadership bandwidth and decision tempo are your primary concern",
-    "Technical Mechanism":"technology and architecture decisions currently dominate",
-    "Emergent Mechanism":"culture and rewarded behaviour are your primary concern",
-  };
-
-  const resultHeader = isTie
-    ? `<div class="cat-title">Suggested starting points</div>
-       <div class="cat-desc">The selected signals point equally toward these mechanisms.</div>`
-    : `<div class="cat-title">Suggested starting point: ${topLabel}</div>
-       <div class="cat-desc">The patterns you selected most closely match the ${topLabel} mechanism.</div>`;
-
-  const tieBlock = isTie ? `
-    <div class="disagree-panel">
-      ${tiedMechs.map(m => `
-        <div style="margin-bottom:14px;">
-          <a href="#" onclick="showCategory('${m}');return false;" class="text-link" style="font-size:15px;font-weight:500;">${CATEGORIES[m].label}</a>
-          <p class="disagree-text" style="margin-top:4px;">Start with ${CATEGORIES[m].label} if ${TYPE_QUALIFIER[CATEGORIES[m].type] || 'this matches your primary concern'}.</p>
-        </div>
-      `).join('')}
-    </div>
-  ` : '';
-
-  const ctaBlock = isTie
-    ? `<a href="#" onclick="openInquiryModal();return false;" class="text-link">Advisory inquiry →</a>`
-    : `<a class="cta-btn" href="#" onclick="showCategory('${topMech}');return false;">Understand ${topLabel} →</a>
-       <a href="#" onclick="openInquiryModal();return false;" class="text-link" style="align-self:center;">Advisory inquiry →</a>`;
+  const tieIntro = wasResolvedTie
+    ? `<p class="disagree-text">${originalTiedLabels.length} mechanisms matched equally: ${originalTiedLabels.join(', ')}. ${TIE_EXPLANATION[tieReason] || ''}</p>`
+    : '';
 
   app.innerHTML = `
     <div class="wrap">
       <div class="cat-head">
         <div class="cat-eyebrow">AI Operating Navigator · Result</div>
-        ${resultHeader}
+        <div class="cat-title">Suggested starting point: ${topLabel}</div>
+        <div class="cat-desc">The patterns you selected most closely match the ${topLabel} mechanism.</div>
       </div>
-
-      ${tieBlock}
 
       <div class="disagree-panel">
         <div class="exec-summary-label">Selected signals</div>
@@ -1193,12 +1214,13 @@ function showNavResult(){
 
         <div class="value-flow-arrow" style="margin:16px 0;">↓</div>
 
-        <div class="exec-summary-label">${isTie ? 'Tally' : 'Strongest match'}</div>
+        <div class="exec-summary-label">Tally</div>
         <ul class="signal-list" style="margin-top:8px;">${rankedList}</ul>
 
+        ${tieIntro}
         ${objectiveNote}
 
-        ${!isTie && neighbourLabels.length ? `<p class="disagree-text" style="margin-top:14px;">Often connected to: ${neighbourLabels.join(', ')}.</p>` : ''}
+        ${neighbourLabels.length ? `<p class="disagree-text" style="margin-top:14px;">Often connected to: ${neighbourLabels.join(', ')}.</p>` : ''}
       </div>
 
       <div class="disagree-panel">
@@ -1208,7 +1230,8 @@ function showNavResult(){
       </div>
 
       <div style="text-align:center;margin-top:20px;display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-        ${ctaBlock}
+        <a class="cta-btn" href="#" onclick="showCategory('${topMech}');return false;">Understand ${topLabel} →</a>
+        <a href="#" onclick="openInquiryModal();return false;" class="text-link" style="align-self:center;">Advisory inquiry →</a>
       </div>
 
       <div class="back-row">
