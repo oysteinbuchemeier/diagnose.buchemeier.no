@@ -689,11 +689,13 @@ const ROOT_MODEL = {
   containsLabel: "The Reference System explains both sides of AI transformation: how operational pressure emerges, and how leadership converts that pressure into sustainable competitive advantage.",
   drivenByText: "Nothing in the framework drives the reference system on its own. It's fed by all seven at once — that's exactly what the inward arrows on the map show.",
   diagnosticQuestions: [
-    "Where does AI pressure first enter the organisation?",
-    "Where does that pressure become visible?",
-    "Which mechanism is currently under the greatest strain?",
-    "Which mechanism is creating the strongest downstream effects?",
-    "Which part of the operating model is least prepared for further AI scaling?"
+    "What must be true for the organisation to coordinate AI across functions?",
+    "What must be true for governance to keep pace with AI-driven decision-making?",
+    "What must be true for AI to create more value than cost and complexity?",
+    "What must be true for the organisation to absorb the new capacity AI creates?",
+    "What must be true for leadership to prioritise and govern as the pace of change increases?",
+    "What must be true for architecture to enable further development rather than constrain it?",
+    "What must be true for culture to reinforce the ways of working the organisation is trying to create?"
   ]
 };
 
@@ -1367,7 +1369,7 @@ function showRoot(){
         <div style="font-size:13px;color:var(--text3);font-style:italic;margin-top:4px;">${r.drivenByText}</div>
 
         <div class="exec-questions" style="margin-top:14px;">
-          <div class="rec-label">Diagnostic questions</div>
+          <div class="rec-label">What must be true?</div>
           <ul class="exec-list">
             ${r.diagnosticQuestions.map(q => `<li>${q}</li>`).join('')}
           </ul>
